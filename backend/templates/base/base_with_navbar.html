@@ -15,7 +15,7 @@
           <a href="{% url 'restraunt_list' %}" >맛집검색</a>
         </li>
         <li>
-          <a href="#"> 리뷰보기</a>
+          <a href="{% url 'review' %}"> 리뷰보기</a>
         </li>
         {% if user.is_authenticated %}
           {% if user.is_staff %}

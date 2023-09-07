@@ -140,7 +140,7 @@ STATICFILES_DIRS = [
 ] # 모든 frontend 구역은 메인 backend 디렉토리의 static 디렉토리로 통합시킴 
 
 MEDIA_URL = "upload/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "upload")
 # 사진 파일및 업로드 파일의 경로를 upload 디렉토리로 통일
 
 # Default primary key field type

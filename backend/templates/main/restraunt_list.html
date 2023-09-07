@@ -9,7 +9,7 @@
         <div class="fg"></div>
         <div class="content">
 
-            <h1>오늘은 어디서 먹을까?</h1>
+            <h1>맛집 리스트</h1>
 
             <div class="header-search">
                 <form class="search-form" action="#" method="get">
@@ -23,40 +23,50 @@
     </div>
 
     <div class="content-wrap">
-        <div class="content-list max-content-width" >
-          <div class="header">
-            <h2>식당 목록</h2>
+        <div class="content-list max-content-width">
+            <div class="header">
+                <h2>식당 목록</h2>
 
-          </div>
-                <div class="contents">
-                    {% for restaurant in restraunt_list %}
+            </div>
+            <div class="contents">
+                {% for restaurant in restraunt_list %}
+
+                <section class="cp-card content">
                     <a href="#">
-                        <section class="cp-card content">
-                            <div class="thumb" style="background-image: url('{{ restaurant.restaurant_image1.url }}');"></div>
-                            <div class="body">
-                                <span class="cp-chip green">{{ restaurant.restaurant_name }}</span>
-                                <h2 class="title">타이틀</h2>
-                                <date class="date">#</date>
-                                <div class="metadata">
-                                    <div class="review-rating">
-
-                                    </div>
-                                    <div class="review-author">
-                                        <!-- <div class="cp-avatar" style="#">
-                                        </div> -->
-                                        <!-- <span>{{ review.author.nickname}}</span> -->
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
+                        <div class="thumb restraunt_thumb"
+                            style="background-image: url('{{ restaurant.restaurant_image1.url }}');"></div>
                     </a>
-                    {% empty %}
-                    <p class="empty">아직 리뷰가 없어요</p>
-                    {% endfor %}
-                
-                </div>
-    </main>
+                    <div class="body">
+                        <a href="#">
+                            <h2 class="title list-title">{{ restaurant.restaurant_name }}</h2>
+                        </a>
+                        <a href="#">
+                            <span class="cp-chip green">맛집</span>
+                        </a>
+                        <!-- <date class="date">#</date> -->
+                        <div class="address-section">{{ restaurant.address}}</div>
+                        <div class="short-review">
+                            <p>리뷰리뷰리뷰</p>
+                        </div>
+                        <div class="metadata list-metadata">
+
+                            <div class="review-rating">
+                                ★★★★★★★★★★★
+                            </div>
+                            <div>
+                                찜하기
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {% empty %}
+                <p class="empty">아직 식당 정보가 없습니다</p>
+                {% endfor %}
+
+            </div>
+</main>
 
 
 
-    {% endblock %}
+{% endblock content %}

@@ -1,0 +1,95 @@
+{% extends "base/base_with_navbar.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+{% if review %}
+{{ review.title }}
+{% else %}
+새 포스트 작성 | Coplate
+{% endif %}
+{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+    <form class="review-form max-content-width" method="post" autocomplete="off" enctype="multipart/form-data">
+        <!-- 여러개 파일 저장하고 싶을 때 꼭 기입 -->
+        {% csrf_token %}
+        <div class="title">
+            {{ form.title|add_class:"cp-input"|attr:"placeholder:제목"}}
+            {% for error in form.title.errors %}
+            <div class="error-message">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="restaurant-name">
+            {% render_field form.restaurant_info|add_class:"custom-input"|attr:"placeholder:음식점명" %}
+            {% for error in form.restaurant_info.errors %}
+            <div class="error-message">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="restaurant-link">
+            {{ form.restaurant_link|add_class:"cp-input"|attr:"placeholder:음식점링크"}}
+            {% for error in form.restaurant_link.errors %}
+            <div class="error-message">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="rating">
+            <div class="cp-stars">
+                {% for rate in form.rating %}
+                {{ rate }}
+                <!-- <label for="{{ rate.id_for_label }}">
+                    {{ rate.tag }}
+                    ★
+                </label> -->
+                {% endfor %}
+            </div>
+        </div>
+        <div class="content">
+            {{ form.content|add_class:"cp-input"|attr:"placeholder:리뷰를 작성해라"}}
+            {% for error in form.content.errors %}
+            <div class="error-message">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% for error in form.rating.errors %}
+        <div class="error-message">{{ error }}</div>
+        {% endfor %}
+        <div class="file">
+            <div class="file-content">
+                <!-- {% if review.image1 %}
+                <img src="{{ review.image1.url}}">
+                {% endif %} -->
+                <div>
+                    {{ form.image1 }}
+                </div>
+            </div>
+        </div>
+        <div class="file">
+            <div class="file-content">
+                <!-- {% if review.image2 %}
+                <img src="{{ review.image2.url}}">
+                {% endif %} -->
+                <div>
+                    {{ form.image2 }}
+                </div>
+            </div>
+        </div>
+        <div class="file">
+            <div class="file-content">
+                <!-- {% if review.image3 %}
+                <img src="{{ review.image3.url}}">
+                {% endif %} -->
+                <div>
+                    {{ form.image3 }}
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a class="cp-button secondary cancel"
+                href="#">취소
+            </a>
+            <button class="cp-button submit" type="submit">완료</button>
+        </div>
+    </form>
+</main>
+{% endblock content %}
