@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.urls import reverse
 from allauth.account.views import PasswordChangeView
@@ -24,7 +25,9 @@ from typing import Any, Dict, List
 
 # 시작페이지
 def index(request):
-    return render(request,'main/index.html') 
+    # Review 모델에서 리뷰 객체들을 가져옵니다. 필터링 등으로 원하는 리뷰를 가져올 수 있습니다.
+    reviews = Review.objects.all()
+    return render(request, 'main/index.html', {'reviews': reviews})
 
 
 
@@ -99,7 +102,47 @@ class ReviewDetailVeiw(DetailView):
         
         return context
 
+# review update 
+class ReviewUpdateViews(UpdateView):
+    model = Review
+    form_class = ReviewForm 
+    template_name = "main/review_form.html"
+    pk_url_kwarg = "review_id"
+    
+    def get_success_url(self):
+        return reverse("review_detail",kwargs={"review_id":self.object.id}) 
 
+# review Delete 
+
+class ReviewDeleteView(DeleteView):
+    model = Review 
+    template_name = "main/review_confirm_delete.html"
+    pk_url_kwarg = "review_id"
+    
+    
+    def get_success_url(self):
+        return reverse("review_list")
+    
+
+# 유저가 쓴 리뷰를 조회한다
+class UserReviewListView(ListView):
+    model = Review
+    template_name = "main/user_review_list.html"
+    context_object_name = "user_reviews"
+    paginate_by = 4
+    
+    def get_queryset(self):
+        user_id = self.kwargs.get("user_id")
+        return Review.objects.filter(author__id = user_id).order_by("dt_created")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        get_object_or_404(User,id=self.kwargs.get("user_id"))
+        context['profile_user'] = get_object_or_404(User,id=self.kwargs.get("user_id"))
+        return context 
+    
+    
+    
 # profile view 
 class ProfileVeiw(DetailView):
     model = User 
@@ -113,6 +156,8 @@ class ProfileVeiw(DetailView):
         user_id = self.kwargs.get("user_id")
         context['user_reviews'] = Review.objects.filter(author__id = user_id).order_by("-dt_created")[:4]
         return context 
+    
+
 
 
 # 패스워드 변경 커스텀 페이지 만들기

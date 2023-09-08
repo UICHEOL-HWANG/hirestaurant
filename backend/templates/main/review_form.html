@@ -86,7 +86,7 @@
 
         <div class="buttons">
             <a class="cp-button secondary cancel"
-                href="#">취소
+                href="{% if review %} {% url 'review-detail' review.id %}{% else %}{% url 'index' %}{% endif %}">취소
             </a>
             <button class="cp-button submit" type="submit">완료</button>
         </div>

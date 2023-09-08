@@ -12,11 +12,16 @@ urlpatterns = [
     path('review_list/',views.ReviewIndexView.as_view(),name="review"),
     path('reviews/new/',views.ReviewCreateView.as_view(),name='review-create'),
     path('reviews/<int:review_id>/',views.ReviewDetailVeiw.as_view(),name='review-detail'),
+    path('reviews/<int:review_id>/edit/',views.ReviewUpdateViews.as_view(),name="review-update"),
 
     # 프로필 
     path('users/<int:user_id>/reviews/',
          views.ProfileVeiw.as_view(),
          name = "profile"
          ),
+    path('users/<int:user_id>/reviews/',views.UserReviewListView.as_view(),name="user-review-list"),
+    
+    
+    
     
 ]

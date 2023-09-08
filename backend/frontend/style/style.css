@@ -1107,3 +1107,87 @@ a.like-button:hover {
   margin-left: 8px;
   font-size: 17px;
 }
+
+/* slide */
+.slider-container .header{
+  margin: 25px 15px 60px 25px;;
+}
+
+.slider-container .header h1{
+  margin-left: 100px;
+}
+
+.slider-container{
+ margin: 210px auto 210px;
+}
+.slider-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.slider {
+    display: flex;
+    gap:  20px;
+    animation: slide 20s linear infinite; /* 슬라이드 애니메이션 적용 */
+}
+.slider ul{
+  display: flex;
+  gap: 20px;
+}
+
+
+.slider li{
+  list-style: none;
+}
+
+.slider .slide-img {
+    width: 500px;
+    height: 450px;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0); /* 초기 위치 */
+  }
+  100% {
+    transform: translateX(-300000px); /* 끝까지 이동 */
+  }
+}
+
+
+/* delete modal */
+
+.dim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+}
+
+.detail-wrap{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  background: #fff;
+  width: 300px;
+  height: 150px;
+  border: 1px solid #fff;
+  border-radius: 50px;
+  opacity: 0;
+  transition: 0.4s;
+  pointer-events: none;
+  user-select: none;
+}
+
+.detail-wrap.active {
+  top: 50%;
+  opacity: 1;
+  pointer-events: auto;
+  user-select: auto;
+}

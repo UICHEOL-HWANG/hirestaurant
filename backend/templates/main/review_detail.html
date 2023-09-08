@@ -32,12 +32,12 @@
 
         <div class="content">
             <img class="thumb" src="{{ review.image1.url}}">
-      {% if review.image2 %}
-        <img class="thumb" src="{{ review.image2.url}}">
-      {% endif %}
-      {% if review.image3 %}
-        <img class="thumb" src="{{ review.image3.url}}">
-      {% endif %}
+            {% if review.image2 %}
+            <img class="thumb" src="{{ review.image2.url}}">
+            {% endif %}
+            {% if review.image3 %}
+            <img class="thumb" src="{{ review.image3.url}}">
+            {% endif %}
 
             <!-- <div class="carousel">
                 <div class="images">
@@ -67,7 +67,7 @@
 
             <p class="content">{{ review.content|linebreaksbr }}</p> {% comment %} 줄바꿈 {% endcomment %}
             <a class="location" target="_blank" href="{{ review.restaurant_link }}">
-                <img class="cp-icon" src="{% static 'coplate/icons/ic-pin.svg' %}" alt="Pin Icon">
+                <img class="cp-icon" src="{% static 'icons/ic-pin.svg' %}" alt="Pin Icon">
                 <span>위치보기</span>
             </a>
         </div>
@@ -81,9 +81,9 @@
                     {% csrf_token %}
                     <button class="like-button" type="submit">
                         {% if likes_review %}
-                        <img width="21px" src="{% static 'coplate/icons/ic-heart-filled.svg' %}" alt="filled like-icon">
+                        <img width="21px" src="{% static 'icons/ic-heart-filled.svg' %}" alt="filled like-icon">
                         {% else %}
-                        <img width="21px" src="{% static 'coplate/icons/ic-heart.svg' %}" alt="like-icon">
+                        <img width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
                         {% endif %}
                         <span> 좋아요 {{ review.likes.count }}</span>
                     </button>
@@ -92,12 +92,12 @@
                 <!-- 로그인이 안되어 있으면 좋아요가 얼마나 올라갔는지만 보여준다 --> {% comment %} data-login-required로 막아줌 {% endcomment %}
                 <a class="like-button" href="{% url 'account_login' %}?next={% url 'review-detail' review.id %}"
                     data-login-required>
-                    <img width="21px" src="{% static 'coplate/icons/ic-heart.svg' %}" alt="like-icon">
+                    <img width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
                     <span> 좋아요 {{ review.likes.count }}</span>
                 </a>
                 {% endif %}
                 <div class="comment-info">
-                    <img src="{% static 'coplate/icons/ic-comments.svg' %}" alt="comment icon">
+                    <img src="{% static 'icons/ic-comments.svg' %}" alt="comment icon">
                     <span> 댓글 {{ review.comments.count }}</span>
                 </div>
             </div>
@@ -161,17 +161,42 @@
                 {% endfor %}
             </div>
         </div>
-
+    
         <div class="footer">
-            <a class="back-link" href="{% url 'index' %}">&lt; 목록으로</a>
+            <a class="back-link" href="{% url 'review' %}">&lt; 목록으로</a>
 
             {% if review.author == user %} {% comment %} 작성자 본인만 삭제,수정이 가능하게끔 접근 {% endcomment %}
             <div class="buttons">
-                <a class="cp-button warn" href="#">삭제</a>
-                <a class="cp-button secondary" href="#">수정</a>
+                <a class="cp-button warn">삭제</a>
+                <a class="cp-button secondary" href="{% url 'review-update' user.id %}">수정</a>
             </div>
             {% endif %}
         </div>
     </article>
+    <div class="dim"></div>
+    <div class="detail-wrap">
+        <div><p>삭제하시겠습니까?</p></div>
+    </div>
 </main>
 {% endblock content %}
+
+{% block modaljs %}
+<script>
+    const deleteBtn = document.querySelector('.cp-button.warn');
+    const detailWrap = document.querySelector('.detail-wrap');
+    const dim = document.querySelector('.dim');
+
+    deleteBtn.addEventListener('click', function () {
+        
+        dim.style.display = "block";
+        detailWrap.style.display = "block";
+        detailWrap.classList.add("active");
+        
+    });
+
+
+    
+
+</script>
+
+{% endblock modaljs %}
