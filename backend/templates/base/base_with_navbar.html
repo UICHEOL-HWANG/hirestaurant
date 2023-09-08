@@ -21,7 +21,7 @@
           {% if user.is_staff %}
             <li><a href="{% url 'admin:index' %}">관리자</a></li>
           {% endif %}
-          <li><a href="#">내 프로필</a></li>
+          <li><a href="{% url 'profile' user.id %}">내 프로필</a></li>
           <li><a href="{% url 'account_logout' %}">로그아웃</a></li>
         {% else %}
           <li><a href="{% url 'account_login' %}">로그인</a></li>

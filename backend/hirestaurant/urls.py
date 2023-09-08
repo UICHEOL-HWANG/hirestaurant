@@ -13,5 +13,10 @@ urlpatterns = [
     path('reviews/new/',views.ReviewCreateView.as_view(),name='review-create'),
     path('reviews/<int:review_id>/',views.ReviewDetailVeiw.as_view(),name='review-detail'),
 
+    # 프로필 
+    path('users/<int:user_id>/reviews/',
+         views.ProfileVeiw.as_view(),
+         name = "profile"
+         ),
     
 ]

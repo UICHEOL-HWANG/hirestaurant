@@ -24,7 +24,6 @@ from typing import Any, Dict, List
 
 # 시작페이지
 def index(request):
-    print(request.user.is_authenticated)
     return render(request,'main/index.html') 
 
 
@@ -62,7 +61,7 @@ class ReviewCreateView(CreateView):
         form.instance.author = self.request.user
         
         # restaurant_name 필드에서 선택된 식당을 가져와서 리뷰와 연결
-        restaurant_name = form.cleaned_data['restaurant_info']  # 필드 이름을 변경한 부분
+        restaurant_name = form.cleaned_data['restaurant_info'] 
         restaurant = get_object_or_404(Restaurant, restaurant_name=restaurant_name)
         form.instance.restaurant_info = restaurant
         
@@ -99,6 +98,21 @@ class ReviewDetailVeiw(DetailView):
             
         
         return context
+
+
+# profile view 
+class ProfileVeiw(DetailView):
+    model = User 
+    template_name = "main/profile.html"
+    pk_url_kwarg = "user_id"
+    
+    context_object_name = "profile_user"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = self.kwargs.get("user_id")
+        context['user_reviews'] = Review.objects.filter(author__id = user_id).order_by("-dt_created")[:4]
+        return context 
 
 
 # 패스워드 변경 커스텀 페이지 만들기

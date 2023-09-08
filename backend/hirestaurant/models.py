@@ -17,6 +17,14 @@ class User(AbstractUser): # AbstractUser 모델 상속
         return self.email
     # username은 무의하기 때문에 username대신 email을 보여준다
     # 왜냐하면 회원가입은 이메일로 하기 때문이다
+    
+#프로필 모델 
+class Profile(models.Model):
+    intro = models.CharField(max_length=60, blank=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nickname
 
 # 식당정보 모델 
 
@@ -31,6 +39,8 @@ class Restaurant(models.Model):
     
     def __str__(self):
         return self.restaurant_name
+    
+
 
 class Review(models.Model):
     title = models.CharField(max_length=30)
