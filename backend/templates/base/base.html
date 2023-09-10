@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'style/theme.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon/favicon.ico' %}">
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/tippy.js@6/themes/light.css">
 
     <title>{% block title %}Hi!restaurant{% endblock title %}</title>
   </head>
@@ -18,6 +21,7 @@
     {% block footer %}{% endblock footer %}
     {% block slidejs %}{% endblock slidejs %}
     {% block modaljs %}{% endblock modaljs %}
+    {% block basejs %} {% endblock basejs %} 
     {% block js %} {% endblock js %}
   </body>
 </html>

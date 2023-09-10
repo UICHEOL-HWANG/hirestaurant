@@ -64,13 +64,6 @@
   </div>
 </main>
 {% endblock content %}
-{% block js %}
-
-<script>
-  const isAuthenticated = '{{ user.is_authenticated }}' === 'True';
-</script>
-<script src="{% static 'js/auth.js' %}"></script>
-{% endblock js %}
 
 {% block slidejs %}
 <script>
@@ -108,3 +101,11 @@
   });
 </script>
 {% endblock slidejs %}
+
+{% block js %}
+
+<script>
+  const isAuthenticated = '{{ user.is_authenticated }}' === 'True';
+</script>
+<script src="{% static 'js/auth.js' %}"></script>
+{% endblock js %}

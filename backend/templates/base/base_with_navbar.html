@@ -20,12 +20,15 @@
         </li>
 
         
+        
         {% if user.is_authenticated %}
-          {% if user.is_staff %}
+          <!-- {% if user.is_staff %}
             <li><a href="{% url 'admin:index' %}">관리자</a></li>
-          {% endif %}
-          <li><a href="{% url 'profile' user.id %}">내 프로필</a></li>
-          <li><a href="{% url 'account_logout' %}">로그아웃</a></li>
+          {% endif %} -->
+
+          <!-- <li><a href="{% url 'profile' user.id %}">내 프로필</a></li>
+          <li><a href="{% url 'account_logout' %}">로그아웃</a></li> -->
+          <li><div class="cp-avatar" style="background-image: url('{{ user.profile_pic.url }}')"></div></li>
         {% else %}
           <li><a href="{% url 'account_login' %}">로그인</a></li>
           <li><a href="{% url 'account_signup' %}">회원가입</a></li>
@@ -54,6 +57,6 @@
   <!-- 새로운 블록을 만든 이유는 jsblock이 많기 때문에 기존 js과 충돌할 가능성이 있기 떄문에 분산  -->
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-  <script src="{% static 'coplate/js/profileMenu.js' %}"></script>
+  <script src="{% static 'js/profileMenu.js' %}"></script>
 {% endif %}
 {% endblock basejs %}
