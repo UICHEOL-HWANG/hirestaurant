@@ -1,0 +1,19 @@
+{% extends "base/base_with_navbar.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}댓글 수정 | HI!Restaurant{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+    <form class="comment-update-form" method="post">
+        <h1 class="comment-update">수정하기</h1>
+        {% csrf_token %}
+        {{ form.content|attr:"placeholder:수정할 내용을 입력해주세요."|add_class:"cp-input" }}
+        <div class="buttons">
+            <button class="cp-button small" type="submit">완료</button>
+            <a class="cp-button small secondary" href="{% url 'review-detail' comment.review.id %}">취소</a>
+        </div>
+    </form>
+</main>
+{% endblock content %}

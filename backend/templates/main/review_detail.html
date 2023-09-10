@@ -65,19 +65,19 @@
             </div> -->
             <!-- 썸네일 끝  -->
 
-            <p class="content">{{ review.content|linebreaksbr }}</p> {% comment %} 줄바꿈 {% endcomment %}
+            <p class="content">{{ review.content|linebreaksbr }}</p> 
             <a class="location" target="_blank" href="{{ review.restaurant_link }}">
                 <img class="cp-icon" src="{% static 'icons/ic-pin.svg' %}" alt="Pin Icon">
                 <span>위치보기</span>
             </a>
         </div>
 
-        {% comment %} 좋아요 부분 {% endcomment %}
+
         <div class="like-comment-block">
             <div class="like-comment-header">
                 {% if user.is_authenticated %}
                 <!-- 만약 로그인이 되었으면 좋아요 누르는 폼을 보여주고 -->
-                <form action="#" method="POST">
+                <form action="{% url 'process-like' review_ctype_id review.id %}" method="POST">
                     {% csrf_token %}
                     <button class="like-button" type="submit">
                         {% if likes_review %}
@@ -89,7 +89,8 @@
                     </button>
                 </form>
                 {% else %}
-                <!-- 로그인이 안되어 있으면 좋아요가 얼마나 올라갔는지만 보여준다 --> {% comment %} data-login-required로 막아줌 {% endcomment %}
+
+                <!-- 로그인이 안되어 있으면 좋아요가 얼마나 올라갔는지만 보여준다 -->
                 <a class="like-button" href="{% url 'account_login' %}?next={% url 'review-detail' review.id %}"
                     data-login-required>
                     <img width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
@@ -101,11 +102,16 @@
                     <span> 댓글 {{ review.comments.count }}</span>
                 </div>
             </div>
-            <form class="comment-create-form" action="#" method="post">
+
+            <form class="comment-create-form" action="{% url 'comment-create' review.id %}" method="post">
                 {% csrf_token %}
                 {{ form.content|attr:"placeholder:댓글 내용을 입력해주세요."|add_class:"comment-input" }}
                 <button class="cp-button small" type="submit">등록</button>
             </form>
+
+
+
+            
             <div class="comment-list">
                 {% for comment in review.comments.all %}
                 <div class="comment">
@@ -121,7 +127,7 @@
                         <div class="buttons">
                             <a href="#">삭제</a>
                             <span> | </span>
-                            <a href="#">수정</a>
+                            <a href="{% url 'comment-update' comment.id %}">수정</a>
                         </div>
                         {% endif %}
                     </div>
@@ -130,7 +136,11 @@
                     </div>
                     <div class="comment-footer">
                         <div class="comment-date">
+                            {% if comment.edited %}
+                            수정됨 ({{ comment.dt_updated|date:"Y년 n월 j일" }})
+                        {% else %}
                             {{ comment.dt_created|date:"Y년 n월 j일" }}
+                        {% endif %}
                         </div>
 
                         {% if user.is_authenticated %}
@@ -139,10 +149,10 @@
                             {% csrf_token %}
                             <button class="like-button" type="submit">
                                 {% if comment in liked_comments %}
-                                <img width="21px" src="{% static 'coplate/icons/ic-heart-filled.svg' %}"
+                                <img width="21px" src="{% static 'icons/ic-heart-filled.svg' %}"
                                     alt="filled like-icon">
                                 {% else %}
-                                <img width="21px" src="{% static 'coplate/icons/ic-heart.svg' %}" alt="like-icon">
+                                <img width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
                                 {% endif %}
                                 <span> 좋아요 {{ comment.likes.count }}</span>
                             </button>
@@ -151,7 +161,7 @@
                         <!-- 로그인이 안되어 있으면 좋아요가 얼마나 올라갔는지만 보여준다 -->
                         <a class="like-button" href="{% url 'account_login' %}?next={% url 'review-detail' review.id %}"
                             data-login-required>
-                            <img width="21px" src="{% static 'coplate/icons/ic-heart.svg' %}" alt="like-icon">
+                            <img width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
                             <span> 좋아요 {{ comment.likes.count }}</span>
                         </a>
                         {% endif %}
@@ -161,41 +171,85 @@
                 {% endfor %}
             </div>
         </div>
-    
+
         <div class="footer">
             <a class="back-link" href="{% url 'review' %}">&lt; 목록으로</a>
 
-            {% if review.author == user %} {% comment %} 작성자 본인만 삭제,수정이 가능하게끔 접근 {% endcomment %}
-            <div class="buttons">
+            {% if review.author == user %}
+            <div class="delete-btn">
                 <a class="cp-button warn">삭제</a>
-                <a class="cp-button secondary" href="{% url 'review-update' user.id %}">수정</a>
+                <a class="cp-button secondary" href="{% url 'review-update' review.id %}">수정</a>
             </div>
             {% endif %}
         </div>
     </article>
     <div class="dim"></div>
     <div class="detail-wrap">
-        <div><p>삭제하시겠습니까?</p></div>
+        <div class="detail-message">
+            <p>삭제하시겠습니까?</p>
+        </div>
+        <div class="delete-buttons">
+            <a class="d-btn" id="delete-button" data-review-id="{{ review.id }}">삭제</a>
+            <a class="d-t-btn ">취소</a>
+        </div>
     </div>
 </main>
 {% endblock content %}
 
 {% block modaljs %}
 <script>
+    const reviewId = {{ review.id|default:0 }};
     const deleteBtn = document.querySelector('.cp-button.warn');
     const detailWrap = document.querySelector('.detail-wrap');
     const dim = document.querySelector('.dim');
+    const cancelButton = document.querySelector('.d-t-btn');
 
+    // 삭제 버튼 클릭 이벤트 핸들러
     deleteBtn.addEventListener('click', function () {
-        
+        // 딤 배경과 모달 활성화
         dim.style.display = "block";
         detailWrap.style.display = "block";
         detailWrap.classList.add("active");
+    });
+
+    // 취소 버튼 클릭 이벤트 핸들러
+    cancelButton.addEventListener('click', function () {
+        // 딤 배경과 모달 비활성화
+        dim.style.display = "none";
+        detailWrap.style.display = "none";
+        detailWrap.classList.remove("active");
+    });
+
+    // 삭제 확인 버튼 클릭 이벤트 핸들러
+    const confirmDeleteButton = document.querySelector('.d-btn');
+
+    confirmDeleteButton.addEventListener('click', function () {
+        // AJAX 요청 보내기
         
+        const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value; // CSRF 토큰 가져오기
+
+        // AJAX 요청 설정
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `/reviews/${reviewId}/delete/`); // 삭제 뷰 URL 설정
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+
+        // AJAX 요청 완료 시 처리
+        xhr.onload = function () {
+            if (xhr.status === 204) {
+                // 삭제가 성공하면 페이지 리로드 또는 리다이렉트를 수행합니다.
+                window.location.href = '/'; // 예시: 홈 페이지로 리다이렉트
+            } else {
+                // 삭제가 실패한 경우 처리
+                console.error('삭제 실패');
+            }
+        };
+
+        // AJAX 요청 보내기
+        xhr.send();
     });
 
 
-    
 
 </script>
 

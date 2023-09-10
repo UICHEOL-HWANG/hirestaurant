@@ -27,14 +27,17 @@ urlpatterns = [
     # 비밀번호 변경 체인지
     path('password/change/',CustomPasswordChangeView.as_view(),name="account_password_change"),
     
-    
+    path('email-confirmation-required/',
+    TemplateView.as_view(template_name="account/email_confirmation_required.html")
+    ,name="account_email_confirmation_required"),
     
     #m ain_sites
     path('',include('hirestaurant.urls')),
     
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # 미디어 파일 업로드 시 필요
 # handler403 = 'coplate.views.custom_permission_denied' # 나중에 홈페이지 영역 링크 침범시 오류 메세지 출력
 

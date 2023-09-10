@@ -4,6 +4,7 @@
 }
 
 :root {
+  --input-placeholder: #8a95a0;
   --text: #2f2c28;
   --link: #ffcc00;
   --button-text: #fff;
@@ -28,8 +29,10 @@
   --stars: #ffcc00;
   --dialog-border: #e3e1dc;
   --dialog-background: #f6f5f3;
-  --dialog-info: #e1811b;
+  --input-focus-border: #7bd3f7;
+  --dialog-info: #7bd3f7;
   --box-border: #e3e1dc;
+  --input-focus-background: #f5f0fc;
 }
 
 * {
@@ -111,8 +114,8 @@ a.cp-button {
   font-size: 17px;
   font-weight: 300;
   background-color: transparent;
-  color: #e1811b;
-  border: 1px solid #e1811b;
+  color: #7bd3f7;
+  border: 1px solid #7bd3f7;
 }
 
 .cp-button:disabled {
@@ -350,4 +353,31 @@ textarea.cp-input {
 .cp-icon.small {
   width: 18px;
   height: 18px;
+}
+
+
+/* comment */
+
+
+.comment-input {
+  height: 200px;
+  width: 100%;
+  padding: 38px 29px 17px;
+  border: 1px solid transparent;
+  border-radius: 27px;
+  outline: none;
+  font-size: 17px;
+  line-height: 17px;
+  background-color: var(--input-background);
+  resize: none;
+}
+
+.comment-update{
+  /* margin: 220px 10px 437px; */
+  text-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
+  font-size: 40px;
+  letter-spacing: 15.4px;
+  text-align: center;
+  word-break: keep-all;
+  color: black;
 }

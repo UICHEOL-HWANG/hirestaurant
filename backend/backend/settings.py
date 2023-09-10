@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     # allauth 회원가입 가능 
     'allauth',
     'allauth.account',
-    # 'allauth.socialaccount',
+    'allauth.socialaccount',
     'django.contrib.sites', #all-auth를 사용할 때 필수로 있어야함
     'widget_tweaks', # 회원가입,로그인 input을 수정시켜주기 위한 설정 
 ]
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'hirestaurant.middleware.ProfileSetupMiddleware', # 우리가 만든 미들웨어를 사용해줌
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -185,7 +186,7 @@ ACCOUNT_SESSION_REMEMBER = True
 # SESSION_COOKIE_AGE = 3600 # 쿠키 유지시간 1시간 한시간 뒤에는 재 로그인을 해야한다
 # 딱히 필요는 없어서 그냥 둠 
 
-ACCOUNT_SIGNUP_FORM_CLASS = "hirestaurant.forms.SignupForm"
+# ACCOUNT_SIGNUP_FORM_CLASS = "hirestaurant.forms.SignupForm"
 # 회원가입 폼 만들어주기
 
 # 지금 회원가입 폼을 가서 작성을 하다가 오류가 생기면 비밀번호가 초기화가 되는데
@@ -201,8 +202,8 @@ ACCOUNT_EMAIL_VARIFICATION = "optional" #인증이 될때까지 로그인은 가
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 # 로그인 인증이 되었는가 안 되었는가?
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "account_email_confirm"#유저가 로그인이 됐을 때 렌더링
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "account_email_confirm" #유저가 로그인이 안 됐을 때 렌더링
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "account_email_confirm"# 유저가 로그인이 됐을 때 렌더링
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "account_email_confirm" # 유저가 로그인이 안 됐을 때 렌더링
 
 #비밀번호 찾기 유효시간 만들기 
 PASSWORD_RESET_TIMEOUT_DAYS = 3 # 비밀번호 찾기 유효시간
@@ -211,4 +212,17 @@ PASSWORD_RESET_TIMEOUT_DAYS = 3 # 비밀번호 찾기 유효시간
 # admin창에서 보면 로그인 로그아웃 내역들이 엄청 쌓이는걸 방지시켜줌
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "" """ 로그인을 할 때마다 인증내역을 admin으로 보내지는걸 없애려고 '' 공백처리 """
 
-
+LOGGING = {
+   'version': 1,
+   'disable_existing_loggers': False,
+   'handlers': {
+       'console': {
+           'level': 'DEBUG',  # 로그 레벨을 DEBUG로 설정
+           'class': 'logging.StreamHandler',
+       },
+   },
+   'root': {
+       'handlers': ['console'],
+       'level': 'DEBUG',  # 로그 레벨을 DEBUG로 설정
+   },
+}

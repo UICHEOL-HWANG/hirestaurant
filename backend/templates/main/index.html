@@ -53,7 +53,7 @@
           {% if review.image1 %}
           <img class="slide-img" src="{{review.image1.url}}" alt="{{review.title}}">
           {% else %}
-          <img class="slide-img" src="http://placehold.it/300x300" alt="{{review.title}}">
+          <img class="slide-img" src="http://placehold.it/500x500" alt="{{review.title}}">
           {% endif %}
         </li>
 
@@ -76,9 +76,7 @@
   
     // 이미지 목록을 슬라이더에 추가
     slider.appendChild(cloneImages);
-        let images = document.querySelectorAll('.slide-img');
   
-    
     // 슬라이드 애니메이션
     const slideKeyframes = `
       @keyframes slide {
@@ -91,15 +89,15 @@
       }
     `;
   
-
     // 스타일 요소를 동적으로 추가
     const styleSheet = document.styleSheets[0];
     styleSheet.insertRule(slideKeyframes, styleSheet.cssRules.length);
-  });
 
-  images.forEach(image => {
-    const clone = image.cloneNode(true);
-    slider.appendChild(clone);
+    let images = document.querySelectorAll('.slide-img');
+    images.forEach(image => {
+      const clone = image.cloneNode(true);
+      slider.appendChild(clone);
+    });
   });
 </script>
 {% endblock slidejs %}

@@ -1,5 +1,6 @@
+from django.db import models
 from django.db.models.query import QuerySet
-from django.shortcuts import render
+from django.shortcuts import render,reverse,get_object_or_404,redirect
 from django.urls import reverse
 from allauth.account.views import PasswordChangeView
 from django.views.generic import (
@@ -11,10 +12,15 @@ from django.views.generic import (
     DetailView,
 )
 
-from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.contrib.contenttypes.models import ContentType
+from typing import Any, Dict, List 
+
+
 
 from hirestaurant.models import * 
 from hirestaurant.forms import * 
+from hirestaurant.mixins import * 
 
 # 접근제한자
 from django.db.models import Q 
@@ -45,16 +51,53 @@ class RestaurantList(ListView):
     paginate_by = 4
 
 
-# Review Detail 
-class ReviewDetailView(DeleteView):
-    mdoel = Review
-    template_name = "main/review_detail.html"
-    pk_url_kwarg = "review_id" # 리뷰의 고유값 id 
+
+# 대댓글 만들기 
+
+
+
+class CommentCreateView(LoginAndVerificationRequiredMixin,CreateView):
+    http_method_names = ['post']
+    model = Comment
+    form_class = CommentForm
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.review = Review.objects.get(id=self.kwargs.get('review_id'))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('review-detail',kwargs ={'review_id':self.kwargs.get('review_id')})
+    
+
+class CommentUpdateView(LoginAndVerificationRequiredMixin,UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'main/comment_update_form.html'
+    pk_url_kwarg = 'comment_id'
+    
+    def form_valid(self, form):
+        # 수정 작업을 수행하기 전에 edited 값을 True로 설정
+        self.object.edited = True
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('review-detail', kwargs={'review_id': self.object.review.id})
+
+
+class CommentDeleteView(LoginAndVerificationRequiredMixin,DeleteView):
+    model = Comment
+    template_name = 'main/comment_confirm_delete.html'
+    pk_url_kwarg = 'comment_id'
+
+    def get_success_url(self):
+        return reverse('review-detail', kwargs={'review_id': self.object.review.id})
 
 
 # Create Review 
 
-class ReviewCreateView(CreateView):
+class ReviewCreateView(LoginAndVerificationRequiredMixin,CreateView):
     model = Review 
     form_class = ReviewForm
     template_name = "main/review_form.html"
@@ -67,43 +110,43 @@ class ReviewCreateView(CreateView):
         restaurant_name = form.cleaned_data['restaurant_info'] 
         restaurant = get_object_or_404(Restaurant, restaurant_name=restaurant_name)
         form.instance.restaurant_info = restaurant
-        
+        # 업로드된 파일을 처리
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse("review-detail", kwargs={"review_id": self.object.id})
 
 
+
 # Review Detail 
 
-class ReviewDetailVeiw(DetailView):
+
+class ReviewDetailView(DetailView):
     model = Review
     template_name = "main/review_detail.html"
     pk_url_kwarg = "review_id" # 상세페이지 구축 링크를 게시물 고유 번호인 id값으로 변환  
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        # 코멘트 영역은 다음에 
-        # context['form'] = CommentForm()
-        # context['review_ctype_id'] = ContentType.objects.get(model='review').id
-        # context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
+        context['form'] = CommentForm()
+        context['review_ctype_id'] = ContentType.objects.get(model='review').id
+        context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
         
         # 유저가 좋아요 기능을 했는지 안 했는지 구별하기 만들기 
-        # user =self.request.user
+        user = self.request.user
         
-        # if user.is_authenticated:
-        #     review = self.object # detailview 에서는 뷰가 다루고 있는 오브젝트를 다 가져올 수 있음
-        #     context['likes_review'] = Like.objects.filter(user=user,review=review).exists()
-        #     # 리뷰의 코멘트를 좋아요를 눌렀는지 안눌렀는지 확인하는 방법 
-        #     context['liked_comments'] = Comment.objects.filter(review=review).filter(likes__user=user)
-        #     #코멘트의 리뷰를 필터를해서 리뷰 안에 그 유저가 유저가 맞는지를 확인한다. 
+        if user.is_authenticated:
+            review = self.object # detailview 에서는 뷰가 다루고 있는 오브젝트를 다 가져올 수 있음
+            context['likes_review'] = Like.objects.filter(user=user,review=review).exists()
+            # 리뷰의 코멘트를 좋아요를 눌렀는지 안눌렀는지 확인하는 방법 
+            context['liked_comments'] = Comment.objects.filter(review=review).filter(likes__user=user)
+            #코멘트의 리뷰를 필터를해서 리뷰 안에 그 유저가 유저가 맞는지를 확인한다. 
             
         
         return context
 
 # review update 
-class ReviewUpdateViews(UpdateView):
+class ReviewUpdateViews(LoginAndVerificationRequiredMixin,UpdateView):
     model = Review
     form_class = ReviewForm 
     template_name = "main/review_form.html"
@@ -114,14 +157,21 @@ class ReviewUpdateViews(UpdateView):
 
 # review Delete 
 
-class ReviewDeleteView(DeleteView):
-    model = Review 
-    template_name = "main/review_confirm_delete.html"
-    pk_url_kwarg = "review_id"
-    
-    
-    def get_success_url(self):
-        return reverse("review_list")
+class ReviewDeleteView(LoginAndOwnershipRequiredMixin, View):
+    def delete(self, request, review_id):
+        try:
+            review = Review.objects.get(pk=review_id)
+            
+            # 사용자 권한 검사 로직 추가
+            if not request.user.is_authenticated or request.user != review.author:
+                return JsonResponse({'error': '권한이 없습니다.'}, status=403)
+
+            review.delete()
+            return JsonResponse({}, status=204)  # 성공적으로 삭제됨을 응답
+        except Review.DoesNotExist:
+            return JsonResponse({'error': '해당 리뷰를 찾을 수 없습니다.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)  # 기타 예외 처리
     
 
 # 유저가 쓴 리뷰를 조회한다
@@ -158,15 +208,119 @@ class ProfileVeiw(DetailView):
         return context 
     
 
+# 프로필 변경 페이지 
 
+class ProfileUpdateView(UpdateView):
+    model = User 
+    form_class = ProfileForm 
+    template_name = "main/profile_update_form.html"
+    
+    raise_exception = True # 접근자 제한 
+    redirect_unauthenticated_users = False # 접근자 제한  
+    
+    def get_object(self,query=None):
+        return self.request.user 
+    
+    def get_success_url(self):
+        return reverse("profile",kwargs=({"user_id":self.request.user.id}))
+
+    
+
+# 초기 프로필 설정 (회원가입 했을 때)
+
+class ProfileSetView(UpdateView):
+    model = User
+    form_class = ProfileForm
+    template_name = "main/profile_set_form.html"
+    
+    def get_object(self,query=None):
+        return self.request.user
+    def get_success_url(self):
+        return reverse("index")
+
+
+# 팔로잉 팔로워 페이지 
+
+class FollowingListView(ListView):
+    model = User
+    template_name = 'main/following_list.html'
+    context_object_name = 'following'
+    paginate_by = 4
+
+    def get_queryset(self):
+        profile_user = get_object_or_404(User, pk=self.kwargs.get('user_id'))
+        return profile_user.following.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile_user_id'] = self.kwargs.get('user_id')
+        return context
+
+
+class FollowerListView(ListView):
+    model = User
+    template_name = 'main/follower_list.html'
+    context_object_name = 'followers'
+    paginate_by = 4
+
+    def get_queryset(self):
+        profile_user = get_object_or_404(User, pk=self.kwargs.get('user_id'))
+        return profile_user.followers.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile_user_id'] = self.kwargs.get('user_id')
+        return context   
+
+
+# 좋아요 프로세스 뷰 
+
+class ProcessLikeView(LoginAndVerificationRequiredMixin,View): #로그인과 이메일 인증을 마쳐야 
+    http_method_names = ['post']
+    
+    def post(self,request,*args,**kwargs):
+        #self.kwargs.get('content_type_id')
+        #self.kwargs.get('object_id')
+        like,created = Like.objects.get_or_create(
+            user = self.request.user, # 현재 유저 
+            content_type_id = self.kwargs.get('content_type_id'), 
+            object_id = self.kwargs.get('object_id'),
+            # get_or_create 상기 건에 해당하는 오브젝트가 있으면 get, 즉시 가져오고 
+            # 가져온 오브젝트를 like에 저장해준다 
+            # create는 false가 됨 
+            # 오브젝트가 없으면 True가 됨 
+            
+            
+        ) # 좋아요를 눌렀는지 안눌렀는지 확인하기 
+        
+        if not created: # 만약 유저가 좋아요를 눌었으면 좋아요가 생성된 상태로 끝남 
+            like.delete()
+        return redirect(self.request.META['HTTP_REFERER'])
+
+# 팔로우 프로세스 뷰 
+    
+class ProcessFollowView(LoginAndVerificationRequiredMixin,View): #로그인과 이메일 인증을 마쳐야 
+    http_method_names = ['post']
+    
+    def post(self,request,*args,**kwargs):
+        # 팔로잉 여부 확인 
+        user = self.request.user
+        profile_user_id = self.kwargs.get('user_id')
+        if user.following.filter(id=profile_user_id).exists(): #만약 좋아요를 눌러줬다면 
+            user.following.remove(profile_user_id) # 팔로잉 로직을 삭제해주고 
+        else:
+            user.following.add(profile_user_id) # 없으면 팔로잉 로직을 추가해줘라
+        return redirect('profile',user_id=profile_user_id)
 
 # 패스워드 변경 커스텀 페이지 만들기
-class CustomPasswordChangeView(PasswordChangeView):
+class CustomPasswordChangeView(LoginRequiredMixin,PasswordChangeView):
+    raise_exception = True # 접근자 제한 
+    redirect_unauthenticated_users = False # 접근자 제한  
     # 오버라이딩 
     # 상속된 속성에 내용을 덧붙여서 다르게 사용 
     # 변경이 완료되면 리다이렉트 해주는 함수
-    def get_success_url(self): 
-        return reverse("index")
+    def get_success_url(self): # 비밀번호 변경이 성공적으로 변경 되면~
+        return reverse('profile',kwargs={"user_id":self.request.user.id})
     
     
     
