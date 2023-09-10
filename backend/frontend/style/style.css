@@ -28,6 +28,10 @@
   --back-link: #7bd3f7;
   --search-input-background: #f3f2ef;
   --sub-font : #9b9b9b;
+
+  --star: #ffcc00;
+  --star-empty:#808080;
+  
 }
 
 /* site */
@@ -486,7 +490,16 @@ input.search-input::placeholder {
   margin: 45px 0 35px;
 }
 
-.review-detail .content .thumb {
+.review-detail .content .carousel {
+  margin-bottom: 30px;
+}
+
+.review-detail .carousel .images {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.review-detail .carousel img.full {
   display: block;
   width: 100%;
   height: 100%;
@@ -497,10 +510,38 @@ input.search-input::placeholder {
   border-radius: 18px;
 }
 
-.review-detail .content .thumb:not(:last-child) {
-  margin-bottom: 30px;
+.review-detail .carousel img.full.hidden {
+  display: none;
 }
 
+.review-detail .carousel .carousel-button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  cursor: pointer;
+}
+
+.review-detail .carousel .carousel-button.prev {
+  left: 24px;
+}
+
+.review-detail .carousel .carousel-button.next {
+  right: 24px;
+}
+
+.review-detail .carousel img.thumb {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 18px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.review-detail .carousel img.thumb.inactive {
+  opacity: 0.3;
+}
 .review-detail .content .content {
   margin: 30px var(--review-detail-side-padding) 28px;
   line-height: 1.82;
@@ -516,6 +557,19 @@ input.search-input::placeholder {
 
 .review-detail .content .location > img {
   margin-right: 5px;
+}
+
+.review-detail .thumbnails img.thumb_img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 18px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.review-detail .thumbnails img.thumb_img.inactive {
+  opacity: 0.3;
 }
 
 .review-detail .footer {
@@ -709,6 +763,56 @@ a.like-button:hover {
   display: inline-flex;
   align-items: center;
 }
+
+
+
+.review-form > .title-rating {
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+}
+
+.review-form > .title-rating .title {
+  flex-grow: 1;
+}
+
+.review-form > .title-rating .rating {
+  flex-shrink: 0;
+  padding-left: 24px;
+}
+
+.review-form > .restaurant-name,
+.review-form > .restaurant-link {
+  grid-column: span 1;
+}
+
+.review-form > .content,
+.review-form > .file,
+.review-form > .buttons {
+  grid-column: span 2;
+}
+
+.review-form .rating,
+.review-form .rating label {
+  cursor: pointer;
+}
+
+.review-form .rating .cp-stars {
+  color: var(--star-empty);
+}
+
+.review-form .rating label.selected {
+  color: var(--star);
+}
+
+.review-form .rating input[type="radio"] {
+  display: none;
+}
+
+
+
+
+
 
 .review-form > .rating label > input {
   margin: 0 5px 0 0;
@@ -1040,28 +1144,34 @@ a.like-button:hover {
 
 .profile-form .profile {
   display: flex;
-  align-items: center;
-  letter-spacing: -0.3px;
-  padding: 16px 24px;
-  border: 1px solid var(--file-content-border);
-  background-color: var(--file-content-background);
-  border-radius: 7px;
+  justify-content: center;
+  margin-bottom: 26px;
 }
 
 .profile-form .profile .profile-pic {
-  margin-right: 10px;
-  flex-shrink: 0;
+  position: relative;
 }
 
-.profile-form .profile .file {
-  line-height: 2;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.profile-form .profile input[type="file"]{
+  display: none;
 }
 
-.profile-form .profile .file > input {
-  max-width: 240px;
+.profile-form .profile .upload-button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: var(--button-inactive-background);
+  cursor: pointer;
+}
+
+.profile-form .profile .upload-button:hover {
+  background-color: var(--button-primary-background);
 }
 
 .profile-form .content > textarea {

@@ -8,6 +8,7 @@
     <a href="{% url 'index' %}">
       <img class="logo" src="{% static 'assets/logo.svg' %}" alt="hirestaurant Logo">
     </a>
+
     <nav>
       <ul class="navbar">
 
@@ -17,6 +18,8 @@
         <li>
           <a href="{% url 'review' %}"> 리뷰보기</a>
         </li>
+
+        
         {% if user.is_authenticated %}
           {% if user.is_staff %}
             <li><a href="{% url 'admin:index' %}">관리자</a></li>
@@ -41,3 +44,16 @@
   </div>
 </footer>
 {% endblock footer %}
+
+{% block basejs %} 
+{% if user.is_authenticated %}
+  <script>
+    const profileURL = "{% url 'profile' user.id %}";
+    const logoutURL = "{% url 'account_logout' %}";
+  </script>
+  <!-- 새로운 블록을 만든 이유는 jsblock이 많기 때문에 기존 js과 충돌할 가능성이 있기 떄문에 분산  -->
+  <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+  <script src="{% static 'coplate/js/profileMenu.js' %}"></script>
+{% endif %}
+{% endblock basejs %}

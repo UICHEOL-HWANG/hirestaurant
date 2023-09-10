@@ -36,11 +36,11 @@
         <div class="rating">
             <div class="cp-stars">
                 {% for rate in form.rating %}
-                {{ rate }}
-                <!-- <label for="{{ rate.id_for_label }}">
-                    {{ rate.tag }}
-                    ★
-                </label> -->
+                <!-- {{ rate }} -->
+                <label for="{{ rate.id_for_label }}">
+                  {{ rate.tag }}
+                  ★
+                </label>
                 {% endfor %}
             </div>
         </div>
@@ -55,9 +55,9 @@
         {% endfor %}
         <div class="file">
             <div class="file-content">
-                <!-- {% if review.image1 %}
+                {% if review.image1 %}
                 <img src="{{ review.image1.url}}">
-                {% endif %} -->
+                {% endif %}
                 <div>
                     {{ form.image1 }}
                 </div>
@@ -65,9 +65,9 @@
         </div>
         <div class="file">
             <div class="file-content">
-                <!-- {% if review.image2 %}
+                {% if review.image2 %}
                 <img src="{{ review.image2.url}}">
-                {% endif %} -->
+                {% endif %}
                 <div>
                     {{ form.image2 }}
                 </div>
@@ -75,9 +75,9 @@
         </div>
         <div class="file">
             <div class="file-content">
-                <!-- {% if review.image3 %}
+                {% if review.image3 %}
                 <img src="{{ review.image3.url}}">
-                {% endif %} -->
+                {% endif %}
                 <div>
                     {{ form.image3 }}
                 </div>
@@ -93,3 +93,12 @@
     </form>
 </main>
 {% endblock content %}
+
+{% block js %}
+<script>
+  const initialRating = '{% if review %}{{ review.rating }}{% else %}0{% endif %}';
+  // 만약에 리뷰를 작성했던적이 있는데 수정하는거면 기존에 작성했던 별점을 보여준다. 
+
+</script>
+<script src="{% static 'js/starInput.js' %}"></script>
+{% endblock js %}
