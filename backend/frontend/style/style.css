@@ -1248,6 +1248,7 @@ a.like-button:hover {
 }
 
 /* slide */
+
 .slider-container .header{
   margin: 25px 15px 60px 25px;;
 }
@@ -1256,42 +1257,27 @@ a.like-button:hover {
   margin-left: 100px;
 }
 
-.slider-container{
- margin: 210px auto 210px;
-}
-.slider-container {
-    width: 100%;
-    overflow: hidden;
+.js-marquee {
+  margin: 25px 15px 60px 25px;;
 }
 
-.slider {
-    display: flex;
-    gap:  20px;
-    animation: slide 3000s linear infinite; /* 슬라이드 애니메이션 적용 */
-}
-.slider ul{
+.js-marquee ul{
   display: flex;
   gap: 20px;
 }
 
-
-.slider li{
+.js-marquee li{
   list-style: none;
 }
 
-.slider .slide-img {
+.js-marquee li img {
     width: 500px;
     height: 450px;
 }
 
-@keyframes slide {
-  0% {
-    transform: translateX(0); /* 초기 위치 */
-  }
-  100% {
-    transform: translateX(-300000px); /* 끝까지 이동 */
-  }
-}
+
+
+
 
 
 /* delete modal */

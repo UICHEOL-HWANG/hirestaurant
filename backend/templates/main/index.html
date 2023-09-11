@@ -42,7 +42,7 @@
     </div>
 
   </div>
-  <div class="slider-container">
+  <!-- <div class="slider-container">
     <div class="header">
       <h1>음식 사진 슬라이드 </h1>
     </div>
@@ -60,43 +60,58 @@
         {% endfor %}
       </ul>
     </div>
-  </div>  
+  </div>   -->
+
+  <div class="slider-container">
+    <div class="header">
+      <h1>음식 사진 슬라이드</h1>
+    </div>
+    <!-- <div class="slider">
+      <div class="slide-item">
+        <ul class="image-slider">
+          {% for review in reviews %}
+          <li>
+            {% if review.image1 %}
+            <img class="slide-img" src="{{review.image1.url}}" alt="{{review.title}}">
+            {% else %}
+            <img class="slide-img" src="http://placehold.it/500x500" alt="{{review.title}}">
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div> -->
+    <div class="marquee-container">
+      <div class="marquee">
+        <ul>
+          {% for review in reviews %}
+          <li>
+            {% if review.image1 %}
+            <img src="{{ review.image1.url }}" alt="{{ review.title }}">
+            {% else %}
+            <img src="http://placehold.it/500x500" alt="{{ review.title }}">
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
   </div>
 </main>
 {% endblock content %}
 
 {% block slidejs %}
+<script src="{% static 'jquery/code.jquery.com_jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'marquee/jquery.marquee.min.js' %}"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const slider = document.querySelector(".slider");
-    const imageSlider = document.querySelector(".image-slider");
-  
-    // 이미지 목록 복사
-    const cloneImages = imageSlider.cloneNode(true);
-  
-    // 이미지 목록을 슬라이더에 추가
-    slider.appendChild(cloneImages);
-  
-    // 슬라이드 애니메이션
-    const slideKeyframes = `
-      @keyframes slide {
-        0% {
-          transform: translateX(0); /* 초기 위치 */
-        }
-        100% {
-          transform: translateX(-100%); /* 끝까지 이동 */
-        }
-      }
-    `;
-  
-    // 스타일 요소를 동적으로 추가
-    const styleSheet = document.styleSheets[0];
-    styleSheet.insertRule(slideKeyframes, styleSheet.cssRules.length);
-
-    let images = document.querySelectorAll('.slide-img');
-    images.forEach(image => {
-      const clone = image.cloneNode(true);
-      slider.appendChild(clone);
+  $(document).ready(function () {
+    $('.marquee').marquee({
+      duration: 10000, // 이미지 전환 간격 (밀리초), 10초로 설정
+      direction: 'left', // 이미지 슬라이드 방향 (왼쪽으로 이동)
+      duplicated: true, // 이미지를 무한 루프할지 여부
+      startVisible: true, // 첫 번째 이미지를 화면에 보이게 함  
+      pauseOnHover: true, // 마우스 호버 시 애니메이션 일시 중지
     });
   });
 </script>
