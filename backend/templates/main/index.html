@@ -34,53 +34,20 @@
         <figure>
           <img src="{% static 'assets/emoji-banner.png' %}" alt="">
         </figure>
-        <a href="#" class="cp-button">추천 받으러가기</a>
-        <a href="{% url 'restraunt_list' %}" class="cp-button"> 식당 검색하러 가기</a>
+        <div class="btn-sec">
+          <a href="#" class="cp-button">추천 받으러가기</a>
+          <a href="{% url 'restraunt_list' %}" class="cp-button"> 식당 검색하러 가기</a>
+        </div>
       </div>
 
 
     </div>
 
   </div>
-  <!-- <div class="slider-container">
-    <div class="header">
-      <h1>음식 사진 슬라이드 </h1>
-    </div>
-    <div class="slider">
-      <ul class="image-slider">
-        {% for review in reviews %}
-        <li>
-          {% if review.image1 %}
-          <img class="slide-img" src="{{review.image1.url}}" alt="{{review.title}}">
-          {% else %}
-          <img class="slide-img" src="http://placehold.it/500x500" alt="{{review.title}}">
-          {% endif %}
-        </li>
-
-        {% endfor %}
-      </ul>
-    </div>
-  </div>   -->
-
   <div class="slider-container">
     <div class="header">
       <h1>음식 사진 슬라이드</h1>
     </div>
-    <!-- <div class="slider">
-      <div class="slide-item">
-        <ul class="image-slider">
-          {% for review in reviews %}
-          <li>
-            {% if review.image1 %}
-            <img class="slide-img" src="{{review.image1.url}}" alt="{{review.title}}">
-            {% else %}
-            <img class="slide-img" src="http://placehold.it/500x500" alt="{{review.title}}">
-            {% endif %}
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div> -->
     <div class="marquee-container">
       <div class="marquee">
         <ul>
@@ -107,7 +74,7 @@
 <script>
   $(document).ready(function () {
     $('.marquee').marquee({
-      duration: 10000, // 이미지 전환 간격 (밀리초), 10초로 설정
+      duration: 55000, // 이미지 전환 간격 (밀리초), 10초로 설정
       direction: 'left', // 이미지 슬라이드 방향 (왼쪽으로 이동)
       duplicated: true, // 이미지를 무한 루프할지 여부
       startVisible: true, // 첫 번째 이미지를 화면에 보이게 함  
