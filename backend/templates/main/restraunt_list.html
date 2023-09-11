@@ -32,7 +32,7 @@
                 {% for restaurant in restraunt_list %}
 
                 <section class="cp-card content">
-                    <a href="#">
+                    <a href="{% url 'restaurant_detail' restaurant.id  %}">
                         <div class="thumb restraunt_thumb"
                             style="background-image: url('{{ restaurant.restaurant_image1.url }}');"></div>
                     </a>

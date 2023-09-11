@@ -53,6 +53,16 @@ class RestaurantList(ListView):
     context_object_name = "restraunt_list"
     paginate_by = 4
 
+# RestaurantDetail 
+
+class RestaurantDetail(DetailView):
+    model = Restaurant
+    template_name = "main/restaurant_detail.html"
+    pk_url_kwarg = "restaurant_id"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 # 대댓글 만들기 
