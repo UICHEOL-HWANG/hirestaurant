@@ -226,3 +226,5 @@ LOGGING = {
        'level': 'DEBUG',  # 로그 레벨을 DEBUG로 설정
    },
 }
+
+handler403 = 'hirestaurant.views.custom_permission_denied'

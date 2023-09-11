@@ -27,6 +27,9 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from typing import Any, Dict, List 
 
+def custom_permission_denied(request, exception):
+    return render(request, 'account/403.html', status=403) # 비정상적인 접근을 막는 403 forbidden 커스텀 
+
 
 
 # 시작페이지
@@ -70,7 +73,7 @@ class CommentCreateView(LoginAndVerificationRequiredMixin,CreateView):
         return reverse('review-detail',kwargs ={'review_id':self.kwargs.get('review_id')})
     
 
-class CommentUpdateView(LoginAndVerificationRequiredMixin,UpdateView):
+class CommentUpdateView(LoginAndOwnershipRequiredMixin,UpdateView):
     model = Comment
     form_class = CommentForm
     template_name = 'main/comment_update_form.html'
@@ -86,7 +89,7 @@ class CommentUpdateView(LoginAndVerificationRequiredMixin,UpdateView):
         return reverse('review-detail', kwargs={'review_id': self.object.review.id})
 
 
-class CommentDeleteView(LoginAndVerificationRequiredMixin,DeleteView):
+class CommentDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
     model = Comment
     template_name = 'main/comment_confirm_delete.html'
     pk_url_kwarg = 'comment_id'
@@ -146,7 +149,7 @@ class ReviewDetailView(DetailView):
         return context
 
 # review update 
-class ReviewUpdateViews(LoginAndVerificationRequiredMixin,UpdateView):
+class ReviewUpdateViews(LoginAndOwnershipRequiredMixin ,UpdateView):
     model = Review
     form_class = ReviewForm 
     template_name = "main/review_form.html"
@@ -228,7 +231,7 @@ class ProfileUpdateView(UpdateView):
 
 # 초기 프로필 설정 (회원가입 했을 때)
 
-class ProfileSetView(UpdateView):
+class ProfileSetView(LoginRequiredMixin,UpdateView):
     model = User
     form_class = ProfileForm
     template_name = "main/profile_set_form.html"

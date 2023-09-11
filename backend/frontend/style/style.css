@@ -77,6 +77,7 @@ body > .site-body {
 
 .site-header.navbar.scrolled {
   background-color: white; /* 원하는 배경색으로 변경하세요. */
+  border: 5px solid #fff;
 }
 
 .site-header .content,
@@ -1382,4 +1383,11 @@ a.like-button:hover {
 .info{
   display: flex;
   justify-content: space-between;
+}
+
+/* denied */
+
+.cp-dialog.info.account-password-dialog.denied-dialog{
+  display: flex;
+  flex-direction: column;
 }
