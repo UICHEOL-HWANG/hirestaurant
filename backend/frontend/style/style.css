@@ -67,12 +67,16 @@ body > .site-body {
 .site-header.navbar {
   /* background-color: var(--site-header-background);
   border-bottom: solid 1px var(--border); */
-
+  transition: background-color 0.3s ease-in-out;
   position: sticky;
   top: 0;
   left: 0;
   right: 0;
   z-index: 2;
+}
+
+.site-header.navbar.scrolled {
+  background-color: white; /* 원하는 배경색으로 변경하세요. */
 }
 
 .site-header .content,
