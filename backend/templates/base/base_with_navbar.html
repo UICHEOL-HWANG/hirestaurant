@@ -51,8 +51,10 @@
 {% block basejs %} 
 {% if user.is_authenticated %}
   <script>
+    const isAdmin = {{ user.is_staff|yesno:"true,false" }};
     const profileURL = "{% url 'profile' user.id %}";
     const logoutURL = "{% url 'account_logout' %}";
+    const adminURL = "{% url 'admin:index' %}"
   </script>
   <!-- 새로운 블록을 만든 이유는 jsblock이 많기 때문에 기존 js과 충돌할 가능성이 있기 떄문에 분산  -->
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
