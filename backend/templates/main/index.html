@@ -69,9 +69,9 @@
 {% endblock content %}
 
 {% block slidejs %}
-<script src="{% static 'jquery/code.jquery.com_jquery-3.7.1.min.js' %}"></script>
+
 <script src="{% static 'marquee/jquery.marquee.min.js' %}"></script>
-<script src="{% static 'js/navAction.js' %}"></script>
+
 <script>
   $(document).ready(function () { 
     $('.marquee').marquee({
@@ -89,6 +89,7 @@
 {% endblock slidejs %}
 
 {% block js %}
+<script src="{% static 'js/navAction.js' %}"></script>
 <script>
   const isAuthenticated = '{{ user.is_authenticated }}' === 'True';
 </script>

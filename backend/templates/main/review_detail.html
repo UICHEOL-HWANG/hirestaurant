@@ -76,15 +76,15 @@
             <div class="like-comment-header">
                 {% if user.is_authenticated %}
                 <!-- 만약 로그인이 되었으면 좋아요 누르는 폼을 보여주고 -->
-                <form action="{% url 'process-like' review_ctype_id review.id %}" method="POST">
+                <form action="{% url 'process-like' review_ctype_id review.id %}" method="POST"  class="like-form">
                     {% csrf_token %}
                     <button class="like-button" type="submit">
                         {% if likes_review %}
-                        <img width="21px" src="{% static 'icons/ic-heart-filled.svg' %}" alt="filled like-icon">
+                        <img class="like-icon" width="21px" src="{% static 'icons/ic-heart-filled.svg' %}" alt="filled like-icon">
                         {% else %}
-                        <img width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
+                        <img class="like-icon" width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
                         {% endif %}
-                        <span> 좋아요 {{ review.likes.count }}</span>
+                        <span class="like-count"> 좋아요 {{ review.likes.count }}</span>
                     </button>
                 </form>
                 {% else %}
@@ -146,11 +146,11 @@
                             {% csrf_token %}
                             <button class="like-button" type="submit">
                                 {% if comment in liked_comments %}
-                                <img width="21px" src="{% static 'icons/ic-heart-filled.svg' %}" alt="filled like-icon">
+                                <img class="like-icon" width="21px" src="{% static 'icons/ic-heart-filled.svg' %}" alt="filled like-icon">
                                 {% else %}
-                                <img width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
+                                <img class="like-icon" width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
                                 {% endif %}
-                                <span> 좋아요 {{ comment.likes.count }}</span>
+                                <span class="like-count"> 좋아요 {{ comment.likes.count }}</span>
                             </button>
                         </form>
                         {% else %}
@@ -193,9 +193,9 @@
 {% endblock content %}
 
 {% block js %}
+<script src="{% static 'js/navAction.js' %}"></script>
 <script>
     const isAuthenticated = '{{ user.is_authenticated }}' === 'True';
-
 </script>
 <script src="{% static 'js/auth.js' %}"></script>
 <script src="{% static 'js/carousel.js' %}"> </script>
@@ -260,3 +260,50 @@
 </script>
 
 {% endblock modaljs %}
+
+{% block likejs %} 
+<script>
+    $(document).ready(function(){
+        $('.like-button').on('click', function(e) {
+            e.preventDefault();
+    
+            const button = $(this);
+            const form = button.closest('form');
+            const url = form.attr('action');
+            const csrfToken = form.find('input[name="csrfmiddlewaretoken"]').val();
+    
+            $.ajax({
+                url: url,
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+    
+                success: function(data) {
+                    // 서버로 받은 데이터로 좋아요 카운트 업데이트 
+                    const likeCount = form.find('.like-count');
+                    likeCount.css('white-space', 'pre !important'); // white-space 스타일 설정
+                    likeCount.text('좋아요 ' + data.like_count);
+                    const likeCountBg = document.querySelector('.like-button, .comment-info');
+                     
+
+                    // 버튼 이미지 업데이트
+
+                    const likeIcon = form.find('.like-icon');
+                    if (data.liked) {
+                        likeIcon.attr('src', '{% static "icons/ic-heart.svg" %}');
+                    } else {
+
+                        likeIcon.attr('src', '{% static "icons/ic-heart-filled.svg" %}');
+                    }
+
+                },
+                error: function(error) {
+                    console.log('Error', error);
+                }
+            });
+        });
+    });
+
+</script>
+{% endblock likejs %}

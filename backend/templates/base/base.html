@@ -12,7 +12,7 @@
     <link
     rel="stylesheet"
     href="https://unpkg.com/tippy.js@6/themes/light.css">
-  
+    <script src="{% static 'jquery/code.jquery.com_jquery-3.7.1.min.js' %}"></script>
 
 
     <title>{% block title %}Hi!restaurant{% endblock title %}</title>
@@ -24,6 +24,7 @@
     {% block slidejs %}{% endblock slidejs %}
     {% block modaljs %}{% endblock modaljs %}
     {% block basejs %} {% endblock basejs %} 
-    {% block js %} {% endblock js %}
+    {% block js %} {% endblock js %}  
+    {% block likejs %} {% endblock likejs %}
   </body>
 </html>

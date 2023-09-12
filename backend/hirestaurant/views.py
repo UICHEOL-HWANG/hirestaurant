@@ -17,6 +17,9 @@ from django.contrib.contenttypes.models import ContentType
 from typing import Any, Dict, List 
 
 
+#CSRF
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 
 from hirestaurant.models import * 
 from hirestaurant.forms import * 
@@ -288,27 +291,55 @@ class FollowerListView(ListView):
 
 # 좋아요 프로세스 뷰 
 
+@method_decorator(csrf_protect, name='dispatch')
 class ProcessLikeView(LoginAndVerificationRequiredMixin,View): #로그인과 이메일 인증을 마쳐야 
     http_method_names = ['post']
     
-    def post(self,request,*args,**kwargs):
-        #self.kwargs.get('content_type_id')
-        #self.kwargs.get('object_id')
-        like,created = Like.objects.get_or_create(
-            user = self.request.user, # 현재 유저 
-            content_type_id = self.kwargs.get('content_type_id'), 
-            object_id = self.kwargs.get('object_id'),
-            # get_or_create 상기 건에 해당하는 오브젝트가 있으면 get, 즉시 가져오고 
-            # 가져온 오브젝트를 like에 저장해준다 
-            # create는 false가 됨 
-            # 오브젝트가 없으면 True가 됨 
+    def post(self, request, *args, **kwargs):
+            content_type_id = self.kwargs.get('content_type_id')
+            object_id = self.kwargs.get('object_id')
+
+            like, created = Like.objects.get_or_create(
+                user=self.request.user,
+                content_type_id=content_type_id,
+                object_id=object_id,
+            )
+
+            if not created:
+                like.delete()
+
+            # 좋아요 개수 계산
+            like_count = Like.objects.filter(content_type_id=content_type_id, object_id=object_id).count()
+
+            # JSON 응답 생성
+            response_data = {
+                'liked': not created,
+                'like_count': like_count,
+                'like_text': '좋아요',  # 좋아요 텍스트를 서버에서 반환
+            }
+
+            return JsonResponse(response_data)
+
+
+    
+    # def post(self,request,*args,**kwargs):
+    #     #self.kwargs.get('content_type_id')
+    #     #self.kwargs.get('object_id')
+    #     like,created = Like.objects.get_or_create(
+    #         user = self.request.user, # 현재 유저 
+    #         content_type_id = self.kwargs.get('content_type_id'), 
+    #         object_id = self.kwargs.get('object_id'),
+    #         # get_or_create 상기 건에 해당하는 오브젝트가 있으면 get, 즉시 가져오고 
+    #         # 가져온 오브젝트를 like에 저장해준다 
+    #         # create는 false가 됨 
+    #         # 오브젝트가 없으면 True가 됨 
             
             
-        ) # 좋아요를 눌렀는지 안눌렀는지 확인하기 
+    #     ) # 좋아요를 눌렀는지 안눌렀는지 확인하기 
         
-        if not created: # 만약 유저가 좋아요를 눌었으면 좋아요가 생성된 상태로 끝남 
-            like.delete()
-        return redirect(self.request.META['HTTP_REFERER'])
+    #     if not created: # 만약 유저가 좋아요를 눌었으면 좋아요가 생성된 상태로 끝남 
+    #         like.delete()
+    #     return redirect(self.request.META['HTTP_REFERER'])
 
 # 팔로우 프로세스 뷰 
     
