@@ -3,8 +3,104 @@
 
 {% load static %}
 
+{% block title %}{{ restaurant.restaurant_name }} | HI!RESTAURANT{% endblock title %}
+
 {% block content %}
-<div class="content">
-    <div class="image_detail"></div>
+<div class="detail-content">
+    <div class="image_detail">
+        <figure>
+            <img src="{{ restaurant.restaurant_image1.url }}" alt="">
+        </figure>
+    </div>
+    <div class="place_details">
+        <h2 class="place-name">{{ restaurant.restaurant_name }}</h2>
+        <div class="category_section">
+            <div><a href="#">카테고리</a></div>
+            <div><a href="#">후기</a></div>
+        </div>
+    </div>
+    <div class="details_placeinfo">
+        <div class="sub-title"><span class="tit_subject">상세정보</span></div>
+
+        <div class="placeinfo_default">
+            <h4 class="tit_detail">
+                <span class="ico_comm ico_address">위치</span>
+            </h4>
+            <div class="location_detail">
+                <span>서울 종로구 삼청로 22-31 1층 (우)03062</span>
+            </div>
+        </div>
+
+        <div class="placeinfo_default">
+            <div class="tit_detail">
+                <div class="ico_comm ico_operation">
+                    운영시간 안내
+                </div>
+            </div>
+            <div class="location_detail">
+                평일 5시
+            </div>
+        </div>
+
+        <div class="placeinfo_default">
+
+            <div class="tit_detail">
+                <div class="ico_comm ico_hompage">
+                    홈페이지
+                </div>
+            </div>
+
+            <div class="location_detail">
+                <div class="location_present">
+                    <a href="#" target="_blank" class="link_hompage">잉스타</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="placeinfo_default">
+            <h4 class="tit_detail">
+                <span class="ico_comm ico_contact">
+                    연락처
+                </span>
+            </h4>
+            <div class="location_detail">
+                저나버노
+            </div>
+        </div>
+
+        <div class="placeinfo_default">
+            <h4 class="tit_detail">
+                <span class="ico_comm ico_tag">
+                    태그
+                </span>
+            </h4>
+            <div class="location_detail">
+                <div class="txt_tag">
+                    <span>#태그</span>
+                </div>
+            </div>
+        </div>
+        <div class="placeinfo_default">
+            <h4 class="tit_detail">
+                <span class="ico_comm ico_delivery">
+                    예약,배달,포장
+                </span>
+            </h4>
+            <div class="location_detail">
+                예약가능,배달불가,포장가능
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="cont_menu">
+    <div class="gallary-list">
+        <div class="particular_head">
+            <h3 class="tit_subject">메뉴</h3>
+        </div>
+        <ul class="list_menu">
+            <li>aaa</li>
+        </ul>
+    </div>
 </div>
 {% endblock content %}
