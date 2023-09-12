@@ -317,7 +317,7 @@ ul.navbar .cp-avatar {
 
 
 .content-list .content .metadata.list-metadata{
-  margin-top: -40px;
+  margin-top: 0px;
 }
 
 .pagination {
@@ -1381,7 +1381,7 @@ a.like-button:hover {
 
 /* info */
 
-.info.{
+.info.profile-info{
   display: flex;
   justify-content: space-between;
 }
@@ -1699,4 +1699,38 @@ a.like-button:hover {
 
 .gallary-list.map-list .info .link {
   color: #5085BB;
+}
+
+/* bookmark */
+
+.btn-type-icon{
+    text-indent: -9999px;
+    vertical-align: middle;
+    appearance:none;
+    cursor: pointer;
+    border: 0px;
+    border-radius: 0;
+    background-color: #fff;
+}
+
+.card-body{
+  position: relative;
+}
+
+.bookmark{
+  position: absolute;
+  top: 143px;
+  right: 18px;
+}
+
+.btn-type-icon.favorite{
+  width: 31px;
+  height: 31px;
+  background-image: url(../img/mango-image.png);
+  background-position: -935px -583px ;
+
+}
+
+.btn-type-icon.favorite.remaked{
+  background-position: -935px -655px ;
 }
