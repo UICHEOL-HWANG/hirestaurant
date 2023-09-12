@@ -1535,19 +1535,44 @@ a.like-button:hover {
 
 /* second detail */
 
-.cont_menu{
-  margin: 30px auto;
-  padding-top: 16px;
-  background: #f3f3f3;
-  border: 1px solid var(--main-header-border);
+.detail-content.menu-info{
+  margin: 20px auto;
 }
 
-.second-detail .gallary-list{
-  padding: 29px 79px 44px;
-  width: 100%;
-  height: 100%;
+.detail-content .gallary-list{
+  padding: 22px 102px 39px;
 }
 
-.second-detail .gallary-list .list_menu li{
+.detail-content .gallary-list .list_menu{
+  margin-top: 30px;
+}
+
+
+.detail-content .gallary-list .list_menu li{
   list-style: none;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  justify-content: space-between;
+  width: 500px;
+}
+
+
+
+.detail-content .gallary-list .list_menu li img{
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+}
+
+.list-content{
+  display: block;
+  font-weight: 300;
+}
+
+.list-content.text-last{
+  color: #888;
+}
+
+.detail-content .gallary-list .list_menu li div{
+  margin-top: 30px;
 }

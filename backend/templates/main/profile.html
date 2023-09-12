@@ -45,6 +45,7 @@
                         팔로잉 {{ profile_user.following.count}}
                     </a>
 
+
                     {% if user.is_authenticated and user != profile_user %}
                     <form class="follow-button" action="{% url 'process-follow' profile_user.id %}" method="post">
                         {% csrf_token %}

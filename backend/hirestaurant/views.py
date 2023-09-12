@@ -217,10 +217,16 @@ class ProfileVeiw(DetailView):
     
     context_object_name = "profile_user"
     
-    def get_context_data(self, **kwargs):
+    def get_context_data(self,**kwargs): # 최신 4개의 리뷰를 profile 템플릿에 전달해줌
         context = super().get_context_data(**kwargs)
-        user_id = self.kwargs.get("user_id")
-        context['user_reviews'] = Review.objects.filter(author__id = user_id).order_by("-dt_created")[:4]
+        # 팔로잉 여부 확인 
+        user = self.request.user
+        profile_user_id = self.kwargs.get('user_id')
+        if user.is_authenticated:
+            context['is_following'] = user.following.filter(id=profile_user_id).exists() #만약 좋아요를 눌러줬다면 
+        # user_id = self.kwargs.get("user_id")
+        context["user_reviews"] = Review.objects.filter(author__id=profile_user_id).order_by("-dt_created")[:4]
+        # 내림차순 
         return context 
     
 
