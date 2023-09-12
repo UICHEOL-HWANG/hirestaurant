@@ -207,6 +207,34 @@ class UserReviewListView(ListView):
         context['profile_user'] = get_object_or_404(User,id=self.kwargs.get("user_id"))
         return context 
     
+# 특정 식당의 리뷰만 모아준다 
+
+class RestaurantDetailReviewList(ListView):
+    model = Review 
+    template_name = "main/restaurant_detail_review_list.html"
+    context_object_name = "restaurant_review_list"
+    paginate_by = 4
+    
+    def get_queryset(self):
+        # URL에서 식당의 ID 값을 가져옵니다.
+        restaurant_id = self.kwargs['restaurant_id']
+        
+        # 해당 식당의 리뷰만 필터링하여 반환합니다.
+        queryset = Review.objects.filter(restaurant_info_id=restaurant_id)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # URL에서 식당의 ID 값을 가져옵니다.
+        restaurant_id = self.kwargs['restaurant_id']
+        
+        # 식당 정보를 가져와 context에 추가합니다.
+        restaurant = Restaurant.objects.get(pk=restaurant_id)
+        context['restaurant'] = restaurant
+        
+        return context
+        
     
     
 # profile view 
@@ -251,12 +279,16 @@ class ProfileUpdateView(UpdateView):
 # 초기 프로필 설정 (회원가입 했을 때)
 
 class ProfileSetView(LoginRequiredMixin,UpdateView):
-    model = User
-    form_class = ProfileForm
+    model = User 
+    form_class = ProfileForm 
     template_name = "main/profile_set_form.html"
+    
+    raise_exception = True # 접근자 제한 
+    redirect_unauthenticated_users = False # 접근자 제한  
     
     def get_object(self,query=None):
         return self.request.user
+    
     def get_success_url(self):
         return reverse("index")
 

@@ -27,7 +27,10 @@
         <div class="content-list max-content-width">
             <div class="header">
                 <h2>리뷰 목록</h2>
+                {% if user.is_authenticated %}
+                <!-- 로그인된 사용자일 때만 버튼을 보여줍니다. -->
                 <a class="cp-ic-button circle newreview" href="{% url 'review-create' %}" data-login-required>리뷰 작성</a>
+                {% endif %}
             </div>
 
             <div class="contents">

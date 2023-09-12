@@ -1,17 +1,17 @@
 {% extends "base/base_with_navbar.html" %}
 {% load static %}
 
-{% block title %}{{profile_user.nickname}}님의 리뷰 | HI!RESTAURANT{% endblock title %}
+{% block title %}{{restaurant.restaurant_name}}식당의 리뷰 | HI!RESTAURANT{% endblock title %}
 
 {% block content %}
 <main class="site-body">
     <div class="content-list max-content-width">
         <div class="header">
-            <h2>{{ profile_user.nickname }}님의 리뷰 ({{ paginator.count}})</h2>
+            <h2>{{restaurant.restaurant_name}} 식당의 리뷰  ({{ paginator.count}})</h2>
         </div>
 
         <div class="contents">
-            {% for review in user_reviews %}
+            {% for review in restaurant_review_list   %}
             <a href="{% url 'review-detail' review.id %}">
                 <div class="cp-card content">
                     <div class="thumb" style="background-image: url('{{ review.image1.url }}');"></div>
@@ -35,12 +35,12 @@
                 </div>
             </a>
             {% empty %}
-            <p class="empty">아직 리뷰가 없어요 :(</p>
+            <p class="empty">아직 리뷰가 없어요</p>
             {% endfor %}
         </div>
 
         <div class="wrap-pagination">
-            <a class="cp-ic-button circle backbutton" href="{% url 'profile' profile_user.id %}">프로필로 돌아가기</a>
+            <a class="cp-ic-button circle backbutton" href="{% url 'restaurant_detail' restaurant.id  %}">식당정보로 돌아가기</a>
             {% if is_paginated %}
             <ul class="pagination">
                 {% if page_obj.has_previous %}

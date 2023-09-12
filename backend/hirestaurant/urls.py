@@ -11,6 +11,10 @@ urlpatterns = [
     #식당 상세정보 
     path('restaurant_detail/<int:restaurant_id>/',views.RestaurantDetail.as_view(),name="restaurant_detail"),
     
+    # 특정 식당의 리뷰 모아보기 
+    path('restaurant/<int:restaurant_id>/',views.RestaurantDetailReviewList.as_view(), name='restaurant_reviews'),
+    
+    
     #리뷰 
     path('review_list/',views.ReviewIndexView.as_view(),name="review"),
     path('reviews/new/',views.ReviewCreateView.as_view(),name='review-create'),
