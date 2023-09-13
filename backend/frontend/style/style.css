@@ -1705,33 +1705,3 @@ a.like-button:hover {
 .gallary-list.map-list .info .link {
   color: #5085BB;
 }
-
-
-
-/* bookmark */
-
-/* 북마크하기 버튼 스타일 */
-.bookmark-button {
-  background-color: #007BFF;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.bookmark-button:hover {
-  background-color: #0056b3;
-}
-
-/* 북마크 해제 버튼 스타일 */
-.unbookmark-button {
-  background-color: #FF4500;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.unbookmark-button:hover {
-  background-color: #FF2200;
-}
