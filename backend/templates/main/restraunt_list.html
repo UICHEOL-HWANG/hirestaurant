@@ -54,12 +54,15 @@
                                 ★★★
                             </div>
                             <div>
-                                <button>
-                                    <img class="bookmark" src="" alt="">
-                                </button>
-                                <p>찜하기</p>
+                                <form method="post" action="{% url 'bookmark' restaurant.id %}">
+                                    {% csrf_token %}
+                                    {% if restaurant.id in bookmarked_restaurants %}
+                                    <button type="submit" class="toggle-bookmark unbookmark-button">북마크 해제</button>
+                                    {% else %}
+                                    <button type="submit" class="toggle-bookmark bookmark-button">북마크하기</button>
+                                    {% endif %}
+                                </form>
                             </div>
-                        </div>
                     </div>
                 </section>
 
@@ -76,4 +79,5 @@
 
 {% block js %}
 <script src="{% static 'js/navAction.js' %}"></script>
+
 {% endblock js %}

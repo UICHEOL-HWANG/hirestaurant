@@ -120,3 +120,10 @@ class Comment(models.Model): # 리뷰 댓글 모델
     
     class Meta: # 모델 자체의 옵션 
         ordering = ['-dt_created'] # 리뷰들을 생성차 / 내림차순 
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.restaurant.restaurant_name}"

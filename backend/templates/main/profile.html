@@ -61,6 +61,11 @@
 
                     </form>
                     {% endif %}
+                    
+                    {% if user.is_authenticated and user.id == profile_user.id %}
+                    <div class="bookmarks"><a href="{% url 'user_bookmarks' profile_user.id %}" class="cp-ic-button after circle morereview">북마크보기</a></div>
+                  {% endif %}
+                  
                 </div>
             </div>
         </div>

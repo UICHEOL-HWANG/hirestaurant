@@ -7,6 +7,9 @@ urlpatterns = [
     
     #식당 정보
     path('restraunt_list/',views.RestaurantList.as_view(),name='restraunt_list'),
+    path('restaurant_list/<int:restaurant_id>/bookmark/', views.BookmarkView.as_view(), name='bookmark'),
+    
+    
     
     #식당 상세정보 
     path('restaurant_detail/<int:restaurant_id>/',views.RestaurantDetail.as_view(),name="restaurant_detail"),
@@ -49,6 +52,9 @@ urlpatterns = [
     
     # 좋아요
     path('like/<int:content_type_id>/<int:object_id>/',views.ProcessLikeView.as_view(),name="process-like"),
+    
+    path('user/<int:pk>/bookmarks/', views.BookmarkedRestaurantsView.as_view(), name='user_bookmarks'),
+
     
     
 ]

@@ -317,7 +317,7 @@ ul.navbar .cp-avatar {
 
 
 .content-list .content .metadata.list-metadata{
-  margin-top: -40px;
+  margin-top: 0;
 }
 
 .pagination {
@@ -1381,7 +1381,7 @@ a.like-button:hover {
 
 /* info */
 
-.info.{
+.info.profile-info{
   display: flex;
   justify-content: space-between;
 }
@@ -1415,6 +1415,11 @@ a.like-button:hover {
 
 .image_detail figure{
   height: 100%;
+}
+
+.image_detail figure img{
+  width: 660px;
+  height: 420px;
 }
 
 .place_details{
@@ -1699,4 +1704,34 @@ a.like-button:hover {
 
 .gallary-list.map-list .info .link {
   color: #5085BB;
+}
+
+
+
+/* bookmark */
+
+/* 북마크하기 버튼 스타일 */
+.bookmark-button {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.bookmark-button:hover {
+  background-color: #0056b3;
+}
+
+/* 북마크 해제 버튼 스타일 */
+.unbookmark-button {
+  background-color: #FF4500;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.unbookmark-button:hover {
+  background-color: #FF2200;
 }

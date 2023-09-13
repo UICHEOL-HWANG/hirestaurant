@@ -12,7 +12,7 @@ from django.views.generic import (
     DetailView,
 )
 
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 from typing import Any, Dict, List 
 
@@ -29,6 +29,8 @@ from hirestaurant.mixins import *
 from django.db.models import Q 
 from django.contrib.contenttypes.models import ContentType
 from typing import Any, Dict, List 
+
+from django.http import HttpResponseForbidden,HttpResponse
 
 def custom_permission_denied(request, exception):
     return render(request, 'account/403.html', status=403) # 비정상적인 접근을 막는 403 forbidden 커스텀 
@@ -55,6 +57,44 @@ class RestaurantList(ListView):
     template_name = "main/restraunt_list.html"
     context_object_name = "restraunt_list"
     paginate_by = 4
+    
+    def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            user = self.request.user
+            if user.is_authenticated:
+                bookmarked_restaurants = Bookmark.objects.filter(user=user).values_list('restaurant_id', flat=True)
+                context['bookmarked_restaurants'] = bookmarked_restaurants
+            return context
+
+class BookmarkView(View):
+    def post(self, request, restaurant_id):
+        if request.user.is_authenticated:
+            restaurant = get_object_or_404(Restaurant, id=restaurant_id)
+            bookmark, created = Bookmark.objects.get_or_create(user=request.user, restaurant=restaurant)
+            
+            if not created:
+                # 이미 북마크된 경우 토글하여 제거
+                bookmark.delete()
+        return redirect('restraunt_list')
+
+
+
+class BookmarkedRestaurantsView(LoginAndVerificationRequiredMixin, View):
+    template_name = 'main/bookmarked_restaurants.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            user_id = request.user.id # 해당 계정의 id을 받고 
+            bookmarks = Bookmark.objects.filter(user=request.user) # 해당 계정이 북마크한 내역 추출 
+            return render(request, self.template_name, {'bookmarks': bookmarks, 'profile_user_id': user_id})
+            # 어떻게 보여줄거냐 html 코드 안에서 호출해줄 이름  
+        else: 
+            # 로그인되지 않은 사용자의 경우 로그인 페이지로 리다이렉트
+            return HttpResponseRedirect(reverse('account_login'))
+
+
+
+
 
 # RestaurantDetail 
 

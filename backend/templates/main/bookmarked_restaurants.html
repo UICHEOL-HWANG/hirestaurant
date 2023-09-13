@@ -1,0 +1,50 @@
+{% extends "base/base_with_navbar.html" %}
+
+{% load static %}
+
+{% block title %}{{request.user.username}}의 찜한 목록 | HI!Restaurant{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main class="site-body">
+    <div class="follow-list">
+        <div class="follow-list-header">
+            <h2>북마크 개수 ({{ bookmarks.count }})</h2>
+            <a class="back-link" href="{% url 'profile' user_id=profile_user_id %}">프로필로 돌아가기</a>
+        </div>
+        {% if bookmarks %}
+        <div class="follow-list-block">
+            {% for bookmark in bookmarks %}
+            <a class="follow-list-row" href="{% url 'restaurant_detail' bookmark.restaurant.id %}">
+                <div class="cp-avatar follow" style="background-image: url('{{ bookmark.restaurant.restaurant_image1.url }}')"></div>
+                <span class="nickname">{{ bookmark.restaurant.restaurant_name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if is_paginated %}
+        <ul class="pagination">
+            {% if bookmarks.has_previous %}
+            <li><a href="?page=1">처음</a></li>
+            <li><a href="?page={{ bookmarks.previous_page_number }}">이전</a></li>
+            {% endif %}
+            {% for num in bookmarks.paginator.page_range %}
+            {% if bookmarks.number == num %}
+            <li class="current">{{ num }}</li>
+            {% elif num > bookmarks.number|add:'-3' and num < bookmarks.number|add:'3' %}
+            <li><a href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if bookmarks.has_next %}
+            <li><a href="?page={{ bookmarks.next_page_number }}">다음</a></li>
+            <li><a href="?page={{ bookmarks.paginator.num_pages }}">마지막</a></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+</main>
+{% endblock content %}
+
