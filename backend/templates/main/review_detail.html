@@ -105,7 +105,7 @@
             <form class="comment-create-form" action="{% url 'comment-create' review.id %}" method="post">
                 {% csrf_token %}
                 {{ form.content|attr:"placeholder:댓글 내용을 입력해주세요."|add_class:"comment-input" }}
-                <button class="cp-button small" type="submit">등록</button>
+                <button class="cp-button small" type="submit" data-login-required>등록</button>
             </form>
 
 

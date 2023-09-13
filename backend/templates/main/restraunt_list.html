@@ -54,7 +54,8 @@
                                 ★★★
                             </div>
                             <div>
-                                <form method="post" action="{% url 'bookmark' restaurant.id %}">
+                                {% if user.is_authenticated %}
+                                <form method="post" action="{% url 'bookmark' restaurant.id %}" >
                                     {% csrf_token %}
                                     {% if restaurant.id in bookmarked_restaurants %}
                                     <button type="submit" class="toggle-bookmark unbookmark-button">북마크 해제</button>
@@ -62,6 +63,7 @@
                                     <button type="submit" class="toggle-bookmark bookmark-button">북마크하기</button>
                                     {% endif %}
                                 </form>
+                                {% endif %}
                             </div>
                     </div>
                 </section>
@@ -79,5 +81,5 @@
 
 {% block js %}
 <script src="{% static 'js/navAction.js' %}"></script>
-
+<script src="{% static 'js/auth.js' %}"></script>
 {% endblock js %}
