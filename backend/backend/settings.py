@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path  
 import os 
+import pymysql 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -90,6 +91,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+pymysql.install_as_MySQLdb() 
+
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('SQL_ENGINE','django.db.backends.sqlite3'),
@@ -142,6 +145,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'frontend/'
+STATIC_ROOT = os.path.join(BASE_DIR,'_frontend')
 
 
 STATICFILES_DIRS = [

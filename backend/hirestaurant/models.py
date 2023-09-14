@@ -51,6 +51,8 @@ class Restaurant(models.Model):
     restaurant_image3 = models.ImageField(upload_to='restaurant_pics',blank=True)
     
     likes = GenericRelation('Like',related_query_name="reivew")
+    latitude = models.DecimalField(max_digits=9, decimal_places=6,default=0.0)  # 위도
+    longitude = models.DecimalField(max_digits=9, decimal_places=6,default=0.0)  # 경도
     
     def __str__(self):
         return self.restaurant_name
@@ -115,6 +117,8 @@ class Comment(models.Model): # 리뷰 댓글 모델
     review = models.ForeignKey(Review,on_delete=models.CASCADE,related_name="comments") # 리뷰가 삭제되면 리뷰에 같이 담긴 코멘트들도 같이 삭제됨
     likes = GenericRelation('Like',related_query_name="comment")
     edited = models.BooleanField(default=False)  # 수정 여부 필드 추가
+
+    
     def __str__(self):
         return self.content[:30] #30자만 출력 
     

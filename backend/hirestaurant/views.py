@@ -105,6 +105,7 @@ class RestaurantDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['restaurant_list'] = Restaurant.objects.all()  # 예시: 모든 레스토랑 가져오기
         return context
 
 
@@ -209,7 +210,7 @@ class ReviewUpdateViews(LoginAndOwnershipRequiredMixin ,UpdateView):
     pk_url_kwarg = "review_id"
     
     def get_success_url(self):
-        return reverse("review_detail",kwargs={"review_id":self.object.id}) 
+        return reverse("review-detail",kwargs={"review_id":self.object.id}) 
 
 # review Delete 
 

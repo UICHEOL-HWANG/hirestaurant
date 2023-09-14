@@ -38,6 +38,7 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 # 미디어 파일 업로드 시 필요
 handler403 = 'hirestaurant.views.custom_permission_denied' # 나중에 홈페이지 영역 링크 침범시 오류 메세지 출력
 
