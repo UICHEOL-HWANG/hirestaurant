@@ -95,16 +95,12 @@ pymysql.install_as_MySQLdb()
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE', 'hirestaurant.dev'),
-        'USER': os.environ.get('MYSQL_USER', 'admin'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD', '!Ghgh1234'),
-        'HOST': os.environ.get('DB', 'db'),  # Docker Compose에서 정의한 서비스 이름
-        'PORT': '3306',  # MySQL의 기본 포트
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'collation': 'utf8mb4_unicode_ci',
-        },
+        'ENGINE': os.environ.get('SQL_ENGINE','django.db.backends.sqlite3'),
+        'NAME': os.environ.get('SQL_DATABASE',os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER' : os.environ.get('SQL_USER','user'),
+        'PASSWORD' : os.environ.get('SQL_PASSWORD','password'),
+        'HOST' : os.environ.get('SQL_HOST','localhost'),
+        'PORT' : os.environ.get('SQL_PORT','3306'),
     }
 }
 
