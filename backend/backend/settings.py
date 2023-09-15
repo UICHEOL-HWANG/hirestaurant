@@ -29,7 +29,7 @@ DEBUG = int(os.environ.get('DEBUG', 1))
 SECRET_KEY = os.environ.get("SECRET_KEY",'7d8t8%7z)^+5v8fte&71st)u+$7&0&4r7ek75-hi-4()6puhk-')
 
 if os.environ.get('DJANGO_ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
+    ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(',')
 else:
     ALLOWED_HOSTS = []
 
