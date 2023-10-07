@@ -8,8 +8,16 @@
 ![아키텍처](image/System_Architecture.png)
 
 ----
+
 ERD
 ![ERD](image/ERD.png)
-----
-Event-Flow
+ERD_CLOUD : https://www.erdcloud.com/d/N2q98w3RHAweaPFg8
+-----------------
 
+와이어프레임
+![와이어프레임](image/와이어프레임.png)
+-----------------------
+
+Event-Flow
+![이벤트플로우](image/이벤트플로우.png)
+------------------------------
