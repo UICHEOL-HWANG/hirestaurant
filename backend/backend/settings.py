@@ -98,7 +98,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('SQL_DATABASE', 'hirestaurant.dev'),
         'USER': os.environ.get('SQL_USER', 'admin'),
-        'PASSWORD': os.environ.get('SQL_PASSWORD', '#'),
+        'PASSWORD': os.environ.get('SQL_PASSWORD', '!Ghgh1234'),
         'HOST': 'db',  # Docker Compose 컨테이너 이름
         'PORT': os.environ.get('SQL_PORT', '3306'),
         'OPTIONS': {
