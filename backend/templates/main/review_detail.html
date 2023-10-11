@@ -76,11 +76,12 @@
             <div class="like-comment-header">
                 {% if user.is_authenticated %}
                 <!-- 만약 로그인이 되었으면 좋아요 누르는 폼을 보여주고 -->
-                <form action="{% url 'process-like' review_ctype_id review.id %}" method="POST"  class="like-form">
+                <form action="{% url 'process-like' review_ctype_id review.id %}" method="POST" class="like-form">
                     {% csrf_token %}
                     <button class="like-button" type="submit">
                         {% if likes_review %}
-                        <img class="like-icon" width="21px" src="{% static 'icons/ic-heart-filled.svg' %}" alt="filled like-icon">
+                        <img class="like-icon" width="21px" src="{% static 'icons/ic-heart-filled.svg' %}"
+                            alt="filled like-icon">
                         {% else %}
                         <img class="like-icon" width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
                         {% endif %}
@@ -146,9 +147,11 @@
                             {% csrf_token %}
                             <button class="like-button" type="submit">
                                 {% if comment in liked_comments %}
-                                <img class="like-icon" width="21px" src="{% static 'icons/ic-heart-filled.svg' %}" alt="filled like-icon">
+                                <img class="like-icon" width="21px" src="{% static 'icons/ic-heart-filled.svg' %}"
+                                    alt="filled like-icon">
                                 {% else %}
-                                <img class="like-icon" width="21px" src="{% static 'icons/ic-heart.svg' %}" alt="like-icon">
+                                <img class="like-icon" width="21px" src="{% static 'icons/ic-heart.svg' %}"
+                                    alt="like-icon">
                                 {% endif %}
                                 <span class="like-count"> 좋아요 {{ comment.likes.count }}</span>
                             </button>
@@ -204,7 +207,7 @@
 
 {% block modaljs %}
 <script>
-    const reviewId = {{ review.id|default:"0" }};
+    const reviewId = {{ review.id|default:"0"|default:"0" }};
     const deleteBtn = document.querySelector('.cp-button.warn');
     const detailWrap = document.querySelector('.detail-wrap');
     const dim = document.querySelector('.dim');
@@ -244,7 +247,7 @@
         xhr.onload = function () {
             if (xhr.status === 204) {
                 // 삭제가 성공하면 페이지 리로드 또는 리다이렉트를 수행합니다.
-                window.location.href = '/'; // 예시: 홈 페이지로 리다이렉트
+                window.location.href = '/review_list/'; // 예시: 홈 페이지로 리다이렉트
             } else {
                 // 삭제가 실패한 경우 처리
                 console.error('삭제 실패');
@@ -261,31 +264,31 @@
 
 {% endblock modaljs %}
 
-{% block likejs %} 
+{% block likejs %}
 <script>
-    $(document).ready(function(){
-        $('.like-button').on('click', function(e) {
+    $(document).ready(function () {
+        $('.like-button').on('click', function (e) {
             e.preventDefault();
-    
+
             const button = $(this);
             const form = button.closest('form');
             const url = form.attr('action');
             const csrfToken = form.find('input[name="csrfmiddlewaretoken"]').val();
-    
+
             $.ajax({
                 url: url,
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrfToken,
                 },
-    
-                success: function(data) {
+
+                success: function (data) {
                     // 서버로 받은 데이터로 좋아요 카운트 업데이트 
                     const likeCount = form.find('.like-count');
                     likeCount.css('white-space', 'pre !important'); // white-space 스타일 설정
                     likeCount.text('좋아요 ' + data.like_count);
                     const likeCountBg = document.querySelector('.like-button, .comment-info');
-                     
+
 
                     // 버튼 이미지 업데이트
 
@@ -298,7 +301,7 @@
                     }
 
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log('Error', error);
                 }
             });

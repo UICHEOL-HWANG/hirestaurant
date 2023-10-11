@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.query import QuerySet
 from django.shortcuts import render,reverse,get_object_or_404,redirect
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 from allauth.account.views import PasswordChangeView
 from django.views.generic import (
     View,
@@ -11,6 +11,8 @@ from django.views.generic import (
     UpdateView,
     DetailView,
 )
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import JsonResponse,HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
@@ -174,7 +176,6 @@ class ReviewCreateView(LoginAndVerificationRequiredMixin,CreateView):
         return reverse("review-detail", kwargs={"review_id": self.object.id})
 
 
-
 # Review Detail 
 
 
@@ -214,22 +215,27 @@ class ReviewUpdateViews(LoginAndOwnershipRequiredMixin ,UpdateView):
 
 # review Delete 
 
-class ReviewDeleteView(LoginAndOwnershipRequiredMixin, View):
-    def delete(self, request, review_id):
-        try:
-            review = Review.objects.get(pk=review_id)
-            
-            # 사용자 권한 검사 로직 추가
-            if not request.user.is_authenticated or request.user != review.author:
-                return JsonResponse({'error': '권한이 없습니다.'}, status=403)
 
-            review.delete()
-            return JsonResponse({}, status=204)  # 성공적으로 삭제됨을 응답
-        except Review.DoesNotExist:
-            return JsonResponse({'error': '해당 리뷰를 찾을 수 없습니다.'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)  # 기타 예외 처리
-    
+
+class ReviewDeleteView(LoginAndOwnershipRequiredMixin, DeleteView):
+    model = Review
+    success_url = reverse_lazy('review')
+
+    def get_object(self, queryset=None):
+        review_id = self.kwargs.get('review_id')  # URL에서 review_id를 가져옵니다.
+        obj = Review.objects.get(pk=review_id)
+        return obj
+
+    def form_valid(self, form):
+        review = self.get_object()
+
+        # 여기에 권한 체크 로직 추가 (예: 현재 사용자가 리뷰 작성자인지 확인)
+        if not self.request.user.is_authenticated or self.request.user != review.author:
+            return JsonResponse({'error': '권한이 없습니다.'}, status=403)
+
+        review.delete()
+
+        return JsonResponse({'message': '삭제되었습니다.'}, status=204)
 
 # 유저가 쓴 리뷰를 조회한다
 class UserReviewListView(ListView):
