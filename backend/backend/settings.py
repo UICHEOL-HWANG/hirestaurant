@@ -95,12 +95,12 @@ pymysql.install_as_MySQLdb()
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('SQL_DATABASE', 'hirestaurant.dev'),
-        'USER': os.environ.get('SQL_USER', 'admin'),
-        'PASSWORD': os.environ.get('SQL_PASSWORD', '!Ghgh1234'),
-        'HOST': 'db',  # Docker Compose 컨테이너 이름
-        'PORT': os.environ.get('SQL_PORT', '3306'),
+        'ENGINE': os.environ.get('MYSQL_ENGINE', 'django.db.backends.mysql'),
+        'NAME': os.environ.get('MYSQL_DATABASE', 'hirestaurant.dev'),
+        'USER': os.environ.get('MYSQL_USER', 'admin'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', '!Ghgh1234'),
+        'HOST': os.environ.get('MYSQL_HOST', 'mysqldb'),
+        'PORT': os.environ.get('MYSQL_PORT', '3307'),  # 환경 변수에서 포트 번호 가져오기
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
