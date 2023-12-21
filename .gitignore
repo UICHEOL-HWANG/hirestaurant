@@ -266,3 +266,6 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/django,python
+
+backend/.env.prod
+backend/.env.dev

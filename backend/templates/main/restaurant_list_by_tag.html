@@ -9,6 +9,7 @@
         <div class="fg"></div>
         <div class="content">
 
+            
             <h1>맛집 리스트</h1>
 
             <div class="header-search">
@@ -24,12 +25,12 @@
 
     <div class="content-wrap">
         <div class="content-list max-content-width">
+            {% for restaurant in restaurants %}
             <div class="header">
-                <h2>식당 목록</h2>
+                <h2>{{ restaurant.tags.first.name }}의 태그를 가진 식당모음 </h2>
 
             </div>
             <div class="contents">
-                {% for restaurant in restraunt_list %}
 
                 <section class="cp-card content">
                     <a href="{% url 'restaurant_detail' restaurant.id  %}">
@@ -51,7 +52,7 @@
                         <div class="metadata list-metadata">
 
                             <div class="review-rating">
-                                
+                                ★★★
                             </div>
                             <div>
                                 {% if user.is_authenticated %}

@@ -8,7 +8,8 @@ urlpatterns = [
     #식당 정보
     path('restraunt_list/',views.RestaurantList.as_view(),name='restraunt_list'),
     path('restaurant_list/<int:restaurant_id>/bookmark/', views.BookmarkView.as_view(), name='bookmark'),
-    
+    # 식당 태그 
+     path('restaurants/tag/<str:tag>/', views.RestaurantListByTagView.as_view(), name='restaurant-list-by-tag'),
     
     
     #식당 상세정보 

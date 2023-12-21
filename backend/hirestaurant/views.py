@@ -68,6 +68,25 @@ class RestaurantList(ListView):
                 context['bookmarked_restaurants'] = bookmarked_restaurants
             return context
 
+class RestaurantListByTagView(ListView):
+    model = Restaurant
+    template_name = "main/restaurant_list_by_tag.html"  # 해당 태그에 따른 식당 목록을 보여줄 템플릿 파일
+    context_object_name = "restaurants"  # 템플릿에서 사용할 식당 목록 변수의 이름
+
+    def get_queryset(self):
+        tag = self.kwargs['tag']  # URL에서 전달된 태그 값 가져오기
+        return Restaurant.objects.filter(tags__name=tag) 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            bookmarked_restaurants = Bookmark.objects.filter(user=user).values_list('restaurant_id', flat=True)
+            context['bookmarked_restaurants'] = bookmarked_restaurants
+        return context
+
+
+
 class BookmarkView(View):
     def post(self, request, restaurant_id):
         if request.user.is_authenticated:

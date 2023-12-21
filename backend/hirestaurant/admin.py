@@ -39,7 +39,7 @@ class CommentAdmin(admin.ModelAdmin):
         LikeInline,
     )
 
-
+admin.site.register(Tag)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Bookmark)
 

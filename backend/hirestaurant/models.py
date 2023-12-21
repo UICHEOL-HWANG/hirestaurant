@@ -38,6 +38,22 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.nickname
+    
+    
+# 태그와 카테고리 모델 
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+# 왜 만들었는지? → 추후에 식당 정보에서 얘네들끼리 정렬을 위해 만듬 
 
 # 식당정보 모델 
 
@@ -53,6 +69,9 @@ class Restaurant(models.Model):
     likes = GenericRelation('Like',related_query_name="reivew")
     latitude = models.DecimalField(max_digits=9, decimal_places=6,default=0.0)  # 위도
     longitude = models.DecimalField(max_digits=9, decimal_places=6,default=0.0)  # 경도
+    
+    tags = models.ManyToManyField(Tag,blank=True) # ManyToManyField로 태그 연결
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,blank=True,null=True)  # ForeignKey로 카테고리 연결
     
     def __str__(self):
         return self.restaurant_name

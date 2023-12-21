@@ -91,19 +91,27 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-pymysql.install_as_MySQLdb() 
+# pymysql.install_as_MySQLdb() 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get('MYSQL_ENGINE', 'django.db.backends.mysql'),
+#         'NAME': os.environ.get('MYSQL_DATABASE', 'hirestaurant.dev'),
+#         'USER': os.environ.get('MYSQL_USER', 'admin'),
+#         'PASSWORD': os.environ.get('MYSQL_PASSWORD', '!Ghgh1234'),
+#         'HOST': os.environ.get('MYSQL_HOST', 'mysqldb'),
+#         'PORT': '3306', 
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#         },
+#     }
+# }
+
+# 배포 전 실험단계 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('MYSQL_ENGINE', 'django.db.backends.mysql'),
-        'NAME': os.environ.get('MYSQL_DATABASE', 'hirestaurant.dev'),
-        'USER': os.environ.get('MYSQL_USER', 'admin'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD', '!Ghgh1234'),
-        'HOST': os.environ.get('MYSQL_HOST', 'mysqldb'),
-        'PORT': os.environ.get('MYSQL_PORT', '3307'),  # 환경 변수에서 포트 번호 가져오기
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 

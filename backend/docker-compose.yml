@@ -33,7 +33,7 @@ services:
     ports:
       - "3307:3306"
     env_file:
-      - /.env.prod
+      - ./.env.prod
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci  # 오타 수정
