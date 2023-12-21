@@ -28,22 +28,22 @@
                 <h2>식당 목록</h2>
 
             </div>
-            <div class="contents">
+            <div class="restraunt_contents">
                 {% for restaurant in restraunt_list %}
 
-                <section class="cp-card content">
+                <section class="restaurant_section">
                     <a href="{% url 'restaurant_detail' restaurant.id  %}">
-                        <div class="thumb restraunt_thumb"
-                            style="background-image: url('{{ restaurant.restaurant_image1.url }}');"></div>
+                        <div class="thumb restraunt_thumb">
+                            <img class="restaurant_img"  src="{{ restaurant.restaurant_image1.url }}" alt="">
+                        </div>
                     </a>
                     <div class="body">
-                        <a href="#">
+                        <a href="{% url 'restaurant_detail' restaurant.id  %}">
                             <h2 class="title list-title">{{ restaurant.restaurant_name }}</h2>
                         </a>
                         <a href="#">
                             <span class="cp-chip green">맛집</span>
                         </a>
-                        <!-- <date class="date">#</date> -->
                         <div class="address-section">{{ restaurant.address}}</div>
                         <div class="short-review">
                             <i class="fa-solid fa-tag"></i>
@@ -56,14 +56,21 @@
                             <div class="review-rating">
                                 
                             </div>
-                            <div>
+                            <div class="bookmark_zone">
                                 {% if user.is_authenticated %}
-                                <form method="post" action="{% url 'bookmark' restaurant.id %}" >
+                                <form method="post" action="{% url 'bookmark' restaurant.id %}" class="bookmark_section" >
                                     {% csrf_token %}
                                     {% if restaurant.id in bookmarked_restaurants %}
-                                    <button type="submit" class="toggle-bookmark unbookmark-button">북마크 해제</button>
+                                    <button type="submit" class="toggle-bookmark unbookmark-button"><i class="fa-solid fa-bookmark"></i></button>
+                                    <div class="bookmarked">
+                                        <div type="submit" class="toggle-bookmark unbookmark-button"><p>북마크 해제</p></div></button>
+                                    </div>
                                     {% else %}
-                                    <button type="submit" class="toggle-bookmark bookmark-button">북마크하기</button>
+
+                                    <button type="submit" class="toggle-bookmark unbookmark-button"><i class="fa-regular fa-bookmark"></i></button>
+                                    <div class="bookmarked">
+                                        <div type="submit" class="toggle-bookmark unbookmark-button"><p>북마크 설정</p></div></button>
+                                    </div>
                                     {% endif %}
                                 </form>
                                 {% endif %}

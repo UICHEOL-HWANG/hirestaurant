@@ -14,20 +14,16 @@
     </div>
     <div class="place_details">
         <h2 class="place-name">{{ restaurant.restaurant_name }}</h2>
-        <div class="category_section">
-            <div><a href="#">카테고리</a></div>
-            <div><a href="#">후기</a></div>
-        </div>
+
     </div>
     <div class="details_placeinfo">
         <div class="sub-title"><span class="tit_subject">상세정보</span></div>
-
         <div class="placeinfo_default">
             <h4 class="tit_detail">
                 <span class="ico_comm ico_address">위치</span>
             </h4>
             <div class="location_detail">
-                <span>서울 종로구 삼청로 22-31 1층 (우)03062</span>
+                <span>{{ restaurant.address }}</span>
             </div>
         </div>
 
@@ -64,7 +60,7 @@
                 </span>
             </h4>
             <div class="location_detail">
-                저나버노
+                {{ restaurant.number }}
             </div>
         </div>
 
@@ -75,30 +71,34 @@
                 </span>
             </h4>
             <div class="location_detail">
+                {% for tag in restaurant.tags.all %}
                 <div class="txt_tag">
-                    <span>#태그</span>
+                    <span>{{ tag.name }}</span>
                 </div>
+                {% endfor %}
             </div>
         </div>
         <div class="placeinfo_default">
             <h4 class="tit_detail">
                 <span class="ico_comm ico_delivery">
-                    예약,배달,포장
+                    가격대로 변경
                 </span>
             </h4>
+
             <div class="location_detail">
-                예약가능,배달불가,포장가능
+                {{ restaurant.price_range }}
             </div>
 
         </div>
     </div>
 </div>
+{% if restaurant.menu %}
 <div class="detail-content menu-info">
     <div class="gallary-list">
-
         <div class="particular_head">
             <h3 class="tit_subject">메뉴</h3>
         </div>
+
         <ul class="list_menu">
             <li>
                 <div>
@@ -132,6 +132,7 @@
                 </div>
                 <div><img src="{% static 'img/까눌레.png' %}" alt=""></div>
             </li>
+
         </ul>
 
         <div class="review-more">
@@ -139,7 +140,23 @@
                 모두 보러가기</a>
         </div>
     </div>
+    {% else %}
+    <div class="detail-content menu-info">
+    <div class="gallary-list not-search">
+        <div class="particular_head">
+            <h3 class="tit_subject">메뉴</h3>
+        </div>
+        <ul class="list_menu">
+            <p>메뉴 준비중...</p>
+        </ul>
+        <div class="review-more">
+            <a class="cp-ic-button after circle morereview" href="{% url 'restaurant_reviews' restaurant.id %}">해당 가게 리뷰
+                모두 보러가기</a>
+        </div>
+    </div>
+</div>
 
+    {% endif %}
 
 </div>
 <div class="detail-content">

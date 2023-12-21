@@ -267,9 +267,6 @@ ul.navbar .cp-avatar {
   background-size: cover;
 }
 
-.content-list .content .thumb.restraunt_thumb{
-  height: 300px;
-}
 
 .content-list .content .body {
   padding: 30px 25px;
@@ -1213,9 +1210,6 @@ a.like-button:hover {
   cursor: pointer;
 }
 
-.profile-form .profile .upload-button:hover {
-  background-color: var(--button-primary-background);
-}
 
 .profile-form .content > textarea {
   height: 188px;
@@ -1289,6 +1283,19 @@ a.like-button:hover {
 .js-marquee li img {
     width: 500px;
     height: 450px;
+}
+
+.restraunt_thumb{
+  height: 300px;
+  width: 440px;
+  object-fit: cover;
+}
+
+.restaurant_img{
+  width: 350px;
+  height: 240px; /* 또는 특정 높이 */
+  object-fit: cover;
+  border-radius: 20px;
 }
 
 
@@ -1408,7 +1415,7 @@ a.like-button:hover {
 .image_detail{
 
   display: block;
-  height: 270px;
+  height: 333px;
   overflow: hidden;
   width: 100%;
 }
@@ -1546,6 +1553,10 @@ a.like-button:hover {
 
 .detail-content .gallary-list{
   padding: 22px 102px 39px;
+}
+
+.detail-content .gallary-list.not-search{
+  padding: 44px 235px 39px;
 }
 
 .detail-content .gallary-list .list_menu{
@@ -1712,4 +1723,33 @@ a.like-button:hover {
 
 .tags{
   margin: 5px;
+}
+
+.restaurant_section{
+  display: flex;
+  /* gap: 15px; */
+}
+.bookmark_zone{
+  margin-top: -5px;
+}
+
+.restraunt_contents{
+  margin-top: 55px;
+}
+
+.toggle-bookmark {
+  border: none; /* 경계선 제거 */
+  background: none; /* 배경색 제거 */
+  padding: 0; /* 패딩 제거 */
+  margin: 0; /* 여백 제거 */
+  cursor: pointer; /* 마우스 커서를 포인터 모양으로 변경 */
+}
+
+.toggle-bookmark i {
+  font-size: 20px;
+}
+
+.bookmark_section{
+  display: flex;
+  gap: 10px;
 }
