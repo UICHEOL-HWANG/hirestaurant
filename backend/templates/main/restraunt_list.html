@@ -46,7 +46,10 @@
                         <!-- <date class="date">#</date> -->
                         <div class="address-section">{{ restaurant.address}}</div>
                         <div class="short-review">
-                            <p>리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰</p>
+                            <i class="fa-solid fa-tag"></i>
+                            {% for tag in restaurant.tags.all %}
+                            <a class="tags" href="{% url 'restaurant-list-by-tag' tag.name %}">{{ tag.name }}</a>
+                        {% endfor %}
                         </div>
                         <div class="metadata list-metadata">
 

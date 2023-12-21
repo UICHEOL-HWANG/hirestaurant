@@ -1705,3 +1705,11 @@ a.like-button:hover {
 .gallary-list.map-list .info .link {
   color: #5085BB;
 }
+
+.short-review{
+  margin-top: 10px;
+}
+
+.tags{
+  margin: 5px;
+}
