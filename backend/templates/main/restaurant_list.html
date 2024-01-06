@@ -9,7 +9,6 @@
         <div class="fg"></div>
         <div class="content">
 
-            
             <h1>맛집 리스트</h1>
 
             <div class="header-search">
@@ -25,13 +24,12 @@
 
     <div class="content-wrap">
         <div class="content-list max-content-width">
-
             <div class="header">
-                <h2>{{ current_tag }}의 태그를 가진 식당모음 </h2>
+                <h2>식당 목록</h2>
 
             </div>
             <div class="restraunt_contents">
-                {% for restaurant in restaurants %}
+                {% for restaurant in restaurant_list %}
 
                 <section class="restaurant_section">
                     <a href="{% url 'restaurant_detail' restaurant.id  %}">
@@ -43,14 +41,18 @@
                         <a href="{% url 'restaurant_detail' restaurant.id  %}">
                             <h2 class="title list-title">{{ restaurant.restaurant_name }}</h2>
                         </a>
-                        <a href="#">
-                            <span class="cp-chip green">{{ restaurant.category }}</span>
+                        {% for cate in restaurant.categories.all %}
+                        <a href="{% url 'category_page' cate.slug %}">
+                            <span class="cp-chip green">{{ cate.name }}</span>
                         </a>
-                        <div class="address-section">{{ restaurant.address}}</div>
+                    {% endfor %}
+                        <div class="address-section">{{ restaurant.address }}</div>
                         <div class="short-review">
                             <i class="fa-solid fa-tag"></i>
                             {% for tag in restaurant.tags.all %}
-                            <a class="tags" href="{% url 'restaurant-list-by-tag' tag.name %}">{{ tag.name }}</a>
+                            <a class="tags" href="{% url 'restaurant-list-by-tag' tag.slug %}">
+                                <span class="badge badge-secondary float-right">{{ tag.name }}</span>
+                            </a>
                         {% endfor %}
                         </div>
                         <div class="metadata list-metadata">

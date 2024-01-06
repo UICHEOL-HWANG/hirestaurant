@@ -54,20 +54,27 @@ class ReviewIndexView(ListView):
     context_object_name = "reviews"
     ordering = ["-dt_created"] # 생성일 기준 내림차순
 
+
 class RestaurantList(ListView):
     model = Restaurant
-    template_name = "main/restraunt_list.html"
-    context_object_name = "restraunt_list"
+    template_name = "main/restaurant_list.html"
+    context_object_name = "restaurant_list"
     paginate_by = 4
     
     def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
-            user = self.request.user
-            if user.is_authenticated:
-                bookmarked_restaurants = Bookmark.objects.filter(user=user).values_list('restaurant_id', flat=True)
-                context['bookmarked_restaurants'] = bookmarked_restaurants
-            return context
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            bookmarked_restaurants = Bookmark.objects.filter(user=user).values_list('restaurant_id', flat=True)
+            context['bookmarked_restaurants'] = bookmarked_restaurants
 
+        # 각 식당별 태그 목록을 문자열로 변환하여 추가
+        for restaurant in context['restaurant_list']:
+            tags = restaurant.tags.all()
+            restaurant.tag_list = ', '.join(tag.name for tag in tags)
+
+        return context
+    
 class RestaurantListByTagView(ListView):
     model = Restaurant
     template_name = "main/restaurant_list_by_tag.html"  # 해당 태그에 따른 식당 목록을 보여줄 템플릿 파일
@@ -79,13 +86,36 @@ class RestaurantListByTagView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        tag = self.kwargs['tag']  # 현재 태그를 컨텍스트에 추가
+        context['current_tag'] = tag
+
         user = self.request.user
         if user.is_authenticated:
             bookmarked_restaurants = Bookmark.objects.filter(user=user).values_list('restaurant_id', flat=True)
             context['bookmarked_restaurants'] = bookmarked_restaurants
         return context
 
+class RestaurantByCategoryView(ListView):
+    model = Restaurant
+    template_name = "main/restaurant_list_by_category.html"
+    context_object_name = 'restaurants'
 
+    def get_queryset(self):
+        # URL에서 카테고리 식별자(slug)를 가져옴
+        category_slug = self.kwargs.get('slug')
+        return Restaurant.objects.filter(categories__slug=category_slug)  # 'category' 대신 'categories' 사용
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_slug = self.kwargs.get('slug')
+        context['selected_category'] = Category.objects.get(slug=category_slug)
+
+        user = self.request.user
+        if user.is_authenticated:
+            bookmarked_restaurants = Bookmark.objects.filter(user=user).values_list('restaurant_id', flat=True)
+            context['bookmarked_restaurants'] = bookmarked_restaurants
+
+        return context
 
 class BookmarkView(View):
     def post(self, request, restaurant_id):

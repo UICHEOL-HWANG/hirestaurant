@@ -39,10 +39,15 @@ class CommentAdmin(admin.ModelAdmin):
         LikeInline,
     )
 
-admin.site.register(Tag)
+
+class TagAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name', )}
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Bookmark)
 
 admin.site.register(Comment,CommentAdmin)
 
 admin.site.register(Like,)
+
+admin.site.register(Category)

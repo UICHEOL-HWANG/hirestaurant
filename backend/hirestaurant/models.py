@@ -44,13 +44,14 @@ class Profile(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
-
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+    
     def __str__(self):
         return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
-
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
     def __str__(self):
         return self.name
 # 왜 만들었는지? → 추후에 식당 정보에서 얘네들끼리 정렬을 위해 만듬 
@@ -71,7 +72,7 @@ class Restaurant(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6,default=0.0)  # 경도
     
     tags = models.ManyToManyField(Tag,blank=True) # ManyToManyField로 태그 연결
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,blank=True,null=True)  # ForeignKey로 카테고리 연결
+    categories = models.ManyToManyField(Category)
     
     def __str__(self):
         return self.restaurant_name

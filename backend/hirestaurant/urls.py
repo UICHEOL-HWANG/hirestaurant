@@ -9,12 +9,12 @@ urlpatterns = [
     path('restraunt_list/',views.RestaurantList.as_view(),name='restraunt_list'),
     path('restaurant_list/<int:restaurant_id>/bookmark/', views.BookmarkView.as_view(), name='bookmark'),
     # 식당 태그 
-     path('restaurants/tag/<str:tag>/', views.RestaurantListByTagView.as_view(), name='restaurant-list-by-tag'),
-    
-    
+    path('restaurants/tag/<str:tag>/', views.RestaurantListByTagView.as_view(), name='restaurant-list-by-tag'),
     #식당 상세정보 
     path('restaurant_detail/<int:restaurant_id>/',views.RestaurantDetail.as_view(),name="restaurant_detail"),
-    
+    #특정 카테고리만 모아보기 
+    path('restaurants/category/<str:slug>/',views.RestaurantByCategoryView.as_view(), name='category_page'),
+
     # 특정 식당의 리뷰 모아보기 
     path('restaurant/<int:restaurant_id>/',views.RestaurantDetailReviewList.as_view(), name='restaurant_reviews'),
     
