@@ -34,6 +34,14 @@ from typing import Any, Dict, List
 
 from django.http import HttpResponseForbidden,HttpResponse
 
+# 추천시스템 
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+
 def custom_permission_denied(request, exception):
     return render(request, 'account/403.html', status=403) # 비정상적인 접근을 막는 403 forbidden 커스텀 
 
@@ -101,19 +109,23 @@ class RestaurantByCategoryView(ListView):
     context_object_name = 'restaurants'
 
     def get_queryset(self):
-        # URL에서 카테고리 식별자(slug)를 가져옴
-        category_slug = self.kwargs.get('slug')
-        return Restaurant.objects.filter(categories__slug=category_slug)  # 'category' 대신 'categories' 사용
+        # URL에서 카테고리 이름을 가져옴
+        category_name = self.kwargs.get('category_name')
+        return Restaurant.objects.filter(categories__name=category_name)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        category_slug = self.kwargs.get('slug')
-        context['selected_category'] = Category.objects.get(slug=category_slug)
+        category_name = self.kwargs.get('category_name')
+        context['selected_category'] = Category.objects.get(name=category_name)
 
         user = self.request.user
         if user.is_authenticated:
             bookmarked_restaurants = Bookmark.objects.filter(user=user).values_list('restaurant_id', flat=True)
             context['bookmarked_restaurants'] = bookmarked_restaurants
+
+        for restaurant in context['restaurants']:
+            category_names = restaurant.category_names.split(', ')
+            restaurant.categories_list = Category.objects.filter(name__in=category_names)
 
         return context
 
@@ -501,6 +513,70 @@ class CustomPasswordChangeView(LoginRequiredMixin,PasswordChangeView):
         return reverse('profile',kwargs={"user_id":self.request.user.id})
     
     
+## 추천시스템 
+
+class RecommendedView(DetailView):
+    model = User
+    template_name = "main/recommendations.html"
+    pk_url_kwarg = "user_id"
+    context_object_name = "profile_user"
+    paginate_by = 4
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
+
+        # 사용자가 북마크한 식당을 가져옵니다.
+        bookmarked_restaurants = Restaurant.objects.filter(bookmark__user=user)
+
+        # 북마크한 식당의 카테고리 이름을 수집합니다.
+        bookmarked_categories = Category.objects.filter(restaurant__in=bookmarked_restaurants).values_list('name', flat=True)
+
+        # 모든 카테고리의 이름을 리스트로 가져옵니다.
+        all_categories = list(Category.objects.values_list('name', flat=True))
+
+        # TF-IDF 벡터라이저를 생성하고 모든 카테고리 데이터로 피팅합니다.
+        vectorizer = TfidfVectorizer()
+        tfidf_matrix = vectorizer.fit_transform(all_categories)
+
+        # 북마크한 카테고리로 사용자 프로필 벡터를 생성합니다.
+        user_profile_vector = vectorizer.transform(bookmarked_categories)
+
+        # 코사인 유사도를 계산합니다.
+        cosine_similarities = cosine_similarity(user_profile_vector, tfidf_matrix)
+
+        # 유사도를 기반으로 식당을 정렬합니다.
+        similar_indices = cosine_similarities.flatten().argsort()[-10:][::-1]
+
+        # all_category_ids_list의 길이 확인
+        all_category_ids_list = list(Category.objects.values_list('id', flat=True))
+        len_all_categories = len(all_category_ids_list)
+
+        # similar_indices의 각 인덱스가 len_all_categories 범위 내에 있는지 확인
+        similar_indices = [i for i in similar_indices if i < len_all_categories]
+
+        # 추천된 카테고리 ID를 구합니다.
+        recommended_category_ids = [all_category_ids_list[i] for i in similar_indices]
+
+        # 추천된 카테고리 ID에 해당하는 식당을 가져옵니다.
+        recommended_restaurants = Restaurant.objects.filter(categories__id__in=recommended_category_ids).distinct()
 
 
+        paginator = Paginator(recommended_restaurants, self.paginate_by)
+        page = self.request.GET.get('page')
+
+        try:
+            restaurants_page = paginator.page(page)
+        except PageNotAnInteger:
+            restaurants_page = paginator.page(1)
+        except EmptyPage:
+            restaurants_page = paginator.page(paginator.num_pages)
+
+        context['page_obj'] = restaurants_page
+        context['is_paginated'] = paginator.num_pages > 1
+        
+        # 여기서 recommended_restaurants를 page_obj로 대체
+        # context['recommended_restaurants'] = recommended_restaurants
+        # 대신 page_obj를 사용합니다:
+        context['recommended_restaurants'] = restaurants_page.object_list
+        return context

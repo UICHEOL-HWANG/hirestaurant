@@ -13,11 +13,14 @@ urlpatterns = [
     #식당 상세정보 
     path('restaurant_detail/<int:restaurant_id>/',views.RestaurantDetail.as_view(),name="restaurant_detail"),
     #특정 카테고리만 모아보기 
-    path('restaurants/category/<str:slug>/',views.RestaurantByCategoryView.as_view(), name='category_page'),
+    path('restaurants/category/<str:category_name>/',views.RestaurantByCategoryView.as_view(), name='category_page'),
 
     # 특정 식당의 리뷰 모아보기 
     path('restaurant/<int:restaurant_id>/',views.RestaurantDetailReviewList.as_view(), name='restaurant_reviews'),
     
+    
+    #추천시스템 
+    path('users/<int:user_id>/recommendations/',views.RecommendedView.as_view(),name='recommend'),
     
     #리뷰 
     path('review_list/',views.ReviewIndexView.as_view(),name="review"),

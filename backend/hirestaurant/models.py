@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.contrib.contenttypes.fields import GenericForeignKey,GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 
 class User(AbstractUser): # AbstractUser 모델 상속 
@@ -51,7 +52,7 @@ class Tag(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
     def __str__(self):
         return self.name
 # 왜 만들었는지? → 추후에 식당 정보에서 얘네들끼리 정렬을 위해 만듬 
@@ -64,8 +65,8 @@ class Restaurant(models.Model):
     number = models.CharField(max_length=20)
     price_range = models.CharField(max_length=20)
     restaurant_image1 = models.ImageField(upload_to='restaurant_pics')
-    restaurant_image2 = models.ImageField(upload_to='restaurant_pics',blank=True)
-    restaurant_image3 = models.ImageField(upload_to='restaurant_pics',blank=True)
+    restaurant_image2 = models.ImageField(upload_to='restaurant_pics',blank=True,null=True)
+    restaurant_image3 = models.ImageField(upload_to='restaurant_pics',blank=True,null=True)
     
     likes = GenericRelation('Like',related_query_name="reivew")
     latitude = models.DecimalField(max_digits=9, decimal_places=6,default=0.0)  # 위도

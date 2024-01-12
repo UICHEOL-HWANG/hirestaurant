@@ -269,3 +269,6 @@ pyrightconfig.json
 
 backend/.env.prod
 backend/.env.dev
+
+backend/path/
+backend/upload/restaurant_pics/

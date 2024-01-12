@@ -34,18 +34,26 @@
                 <section class="restaurant_section">
                     <a href="{% url 'restaurant_detail' restaurant.id  %}">
                         <div class="thumb restraunt_thumb">
-                            <img class="restaurant_img"  src="{{ restaurant.restaurant_image1.url }}" alt="">
+                            {% if restaurant.restaurant_image1  %}
+                            <div class="thumb restraunt_thumb">
+                                <img class="restaurant_img"  src="{{ restaurant.restaurant_image1.url }}" alt="">
+                            </div>
+                            {% else %}
+                            <div class="thumb restraunt_thumb">
+                                <img class="restaurant_img">
+                            </div>
+                            {% endif %}
                         </div>
                     </a>
                     <div class="body">
                         <a href="{% url 'restaurant_detail' restaurant.id  %}">
                             <h2 class="title list-title">{{ restaurant.restaurant_name }}</h2>
                         </a>
-                        {% for cate in restaurant.categories.all %}
-                        <a href="{% url 'category_page' cate.slug %}">
+                        {% for cate in restaurant.categories_list %}
+                        <a href="{% url 'category_page' cate.name %}">
                             <span class="cp-chip green">{{ cate.name }}</span>
                         </a>
-                    {% endfor %}
+                        {% endfor %}
                         <div class="address-section">{{ restaurant.address }}</div>
                         <div class="short-review">
                             <i class="fa-solid fa-tag"></i>

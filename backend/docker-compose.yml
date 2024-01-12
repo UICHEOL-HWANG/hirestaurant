@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   nginx:
@@ -25,10 +25,10 @@ services:
       - ./.env.dev
     depends_on:
       - db
-      
+
   db:
     image: mysql:latest
-    container_name: mysqldb
+    container_name: mysql_container
     restart: always
     ports:
       - "3307:3306"
@@ -36,14 +36,13 @@ services:
       - ./.env.prod
     command:
       - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci  # 오타 수정
+      - --collation-server=utf8mb4_unicode_ci # 오타 수정
       - --local-infile=1
       - --bind-address=0.0.0.0
       - --secure-file-priv=""
     volumes:
       - ./path/to/my.cnf:/etc/mysql/my.cnf
-      - mysql_data:/var/lib/mysql 
-
+      - mysql_data:/var/lib/mysql
 
 volumes:
   mysql_data:

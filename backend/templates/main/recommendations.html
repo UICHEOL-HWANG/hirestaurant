@@ -1,0 +1,93 @@
+{% extends "base/base_with_navbar.html" %}
+
+{% load static %}
+
+{% block title %}{{ profile_user.nickname }}를 위한 식당추천 | hirestaurant {% endblock title %}
+
+{% block content %}
+<main class="site-body">
+    <div class="profile-header">
+        <div class="content max-content-width">
+            <div class="cp-avatar large profile-pic"
+                style="background-image: url('{{ profile_user.profile_pic.url }}')"></div>
+            <div class="info profile-info">
+
+                <div class="intro">
+                    <h1 class="username">{{ profile_user.nickname }}</h1>
+                    <div>
+                        {% if profile_user.intro %}
+                        <p class="cp-chip intro">{{ profile_user.intro }}</p>
+                        {% else %}
+                        <p class="cp-chip intro">자기소개가 없습니다</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="content-list max-content-width">
+        <div class="header">
+            <h2>{{ profile_user.nickname }}를 위한 맞춤 식당 추천</h2>
+        </div>
+
+
+
+            <div class="restraunt_contents">
+                {% for restaurant in recommended_restaurants %}
+
+                <section class="restaurant_section">
+                    <a href="{% url 'restaurant_detail' restaurant.id  %}">
+                        <div class="thumb restraunt_thumb">
+                            {% if restaurant.restaurant_image1  %}
+                            <div class="thumb restraunt_thumb">
+                                <img class="restaurant_img"  src="{{ restaurant.restaurant_image1.url }}" alt="">
+                            </div>
+                            {% else %}
+                            <div class="thumb restraunt_thumb">
+                                <img class="restaurant_img">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </a>
+                    <div class="body">
+                        <a href="{% url 'restaurant_detail' restaurant.id  %}">
+                            <h2 class="title list-title">{{ restaurant.restaurant_name }}</h2>
+                        </a>
+                        <div class="address-section">{{ restaurant.address }}</div>
+                        <div class="short-review">
+                            <i class="fa-solid fa-tag"></i>
+                        </div>
+                    </div>
+                </section>
+
+                {% empty %}
+                <p class="review-empty">아직 식당 정보가 없습니다</p>
+                {% endfor %}
+            </div>
+    </div>
+    {% if is_paginated %}
+            <footer>
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page=1">처음</a></li>
+                    <li><a href="?page={{ page_obj.previous_page_number }}">이전</a></li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="current">{{ num }}</li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <li><a
+                            href="?page={{ num }}">{{ num }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}">다음</a></li>
+                        <li><a href="?page={{ page_obj.paginator.num_pages }}">마지막</a></li>
+                        {% endif %}
+                </ul>
+            </footer>
+            {% endif %}
+{% endblock content %}

@@ -11,7 +11,11 @@
 
     <nav>
       <ul class="navbar">
-
+        {% if user.is_authenticated %}
+        <li>
+          <a href="{% url 'recommend' user.pk %}">추천</a>
+        </li>
+        {% endif %}
         <li>
           <a href="{% url 'restraunt_list' %}" >맛집검색</a>
         </li>
