@@ -23,17 +23,17 @@ Event-Flow
 ![이벤트플로우](image/이벤트플로우.png)
 ---
 
-페이지시연✔
-![페이지메인](https://github.com/UICHEOL-HWANG/hirestaurant/assets/109947779/fbfd401d-ae04-4de7-9d5a-f86aac26edf1)
+추천시스템 구현✔
+![main](https://github.com/UICHEOL-HWANG/hirestaurant/assets/109947779/c3b950f0-fbf4-4ae7-940f-c775959cd46a)
 ---
-
 
 리뷰작성👀
-![리뷰작성](https://github.com/UICHEOL-HWANG/hirestaurant/assets/109947779/472d3ff4-443a-471d-90f0-1d40c97594b1)
+![ea1f3f16-e2dc-46fa-bebd-d9c08ad9f229](https://github.com/UICHEOL-HWANG/hirestaurant/assets/109947779/a5750b7a-7b80-4055-890f-973056a4f5dc)
 ---
 
+
 마이페이지 내역🚗
-![북마크,리뷰,팔로우,팔로잉](https://github.com/UICHEOL-HWANG/hirestaurant/assets/109947779/b151ba42-711e-4241-96de-37827750c8da)
+![7466e123-4db7-46d8-bfa5-f8bf51cb970f](https://github.com/UICHEOL-HWANG/hirestaurant/assets/109947779/696cfc6d-e692-4df3-956f-95846e11da74)
 ---
 
 
