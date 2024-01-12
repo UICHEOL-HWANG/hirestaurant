@@ -99,7 +99,7 @@ DATABASES = {
         'NAME': os.environ.get('MYSQL_DATABASE', 'hirestaurant.dev'),
         'USER': os.environ.get('MYSQL_USER', 'admin'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD', '!Ghgh1234'),
-        'HOST': os.environ.get('MYSQL_HOST', 'mysql_container'),
+        'HOST': os.environ.get('MYSQL_HOST', 'mysqldb'),
         'PORT': '3306', 
         'OPTIONS': {
             'charset': 'utf8mb4',
